@@ -11,7 +11,30 @@ import SwiftUI
 struct Lenscape_PrototypeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView{
+                
+                HomeView()
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+                
+                ArchiveView()
+                    .tabItem {
+                        Label("Archive", systemImage: "book.fill")
+                    }
+                
+                CommunityView()
+                    .tabItem {
+                        Label("Community", systemImage: "person.3.fill")
+                    }
+                
+                ProfileView()
+                    .tabItem {
+                        Label("Profile", systemImage: "gearshape.fill")
+                    }
+                
+            }
+            
         }
     }
 }
