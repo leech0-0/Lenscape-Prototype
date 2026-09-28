@@ -11,8 +11,9 @@ import SwiftUI
 @Observable
 final class QuestsViewModel {
     var currentQuest = Quest()
+    var hasWatchedVideo: Bool = false
     
-    //Dunamic properties driven by state
+    //Dynamic properties driven by state
     var questTitle: String {
         currentQuest.isViewed ? currentQuest.title : currentQuest.unreadTitle
     }
@@ -21,7 +22,10 @@ final class QuestsViewModel {
         currentQuest.isViewed ? "Continue" : "Check it out!"
     }
     
-    func markQuestAsViewed() {
+    func markVideoAsWatched() {
         currentQuest.isViewed = true
+        hasWatchedVideo = true
     }
+    
+    
 }

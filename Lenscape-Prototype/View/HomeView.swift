@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct HomeView: View {
     
@@ -24,15 +25,19 @@ struct HomeView: View {
                     
                     Spacer()
                     
-                    
-                    
                     // Card Layout for Quests
                 Text("Weekly Quests")
                         .font(.title2)
                         .fontWeight(.bold)
                         .padding()
                     
-                    NavigationLink(destination: QuestsView(viewModel: viewModel)){
+                    NavigationLink(destination: Group {
+                                            if viewModel.hasWatchedVideo {
+                                                QuestsView(viewModel: viewModel)
+                                            } else {
+                                                QuestsVideoView(viewModel: viewModel)
+                                            }
+                                        }) {
                         HStack{
                             
                             VStack(){
@@ -120,6 +125,8 @@ struct HomeView: View {
 }
 
 
+
+// MARK: - Preview
 #Preview {
     HomeView()
 }

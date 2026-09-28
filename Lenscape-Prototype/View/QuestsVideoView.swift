@@ -1,0 +1,62 @@
+//
+//  QuestVideoView.swift
+//  Lenscape-Prototype
+//
+
+import SwiftUI
+import AVKit
+
+struct QuestsVideoView: View {
+    var viewModel: QuestsViewModel
+    
+    //initialise AVPlayer with local video
+    var player: AVPlayer {
+        if let url = Bundle.main.url(forResource: "placeholderVideo", withExtension: "MOV") {
+            return AVPlayer(url: url)
+        }
+        return AVPlayer()
+    }
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            Text("Introductory Video")
+                .font(.title2)
+                .bold()
+                .padding(.top)
+            
+            // Embedded Video Player
+            VideoPlayer(player: player)
+                .frame(height: 240)
+                .cornerRadius(16)
+                .padding(.horizontal)
+                .onAppear {
+                    player.play()
+                }
+                .onDisappear {
+                    player.pause()
+                }
+            
+            Spacer()
+            
+            // Proceed to the actual QuestsView
+            NavigationLink(destination: QuestsView(viewModel: viewModel)) {
+                Text("Proceed to Quest")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue, in: RoundedRectangle(cornerRadius: 14))
+            }
+            .padding(.horizontal)
+            .simultaneousGesture(TapGesture().onEnded {
+                viewModel.markVideoAsWatched()
+            })
+        }
+        .navigationTitle("Welcome Quest")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+#Preview {
+    QuestsVideoView(viewModel: QuestsViewModel())
+}

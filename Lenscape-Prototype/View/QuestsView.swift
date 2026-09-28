@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct QuestsView: View {
-    // 1. Declare the view model property here
     var viewModel: QuestsViewModel
     
     var body: some View {
         VStack {
-            Text("Quest Details")
+            Text("Quest Details View")
                 .font(.largeTitle)
                 .bold()
         }
+        .navigationTitle("Environmentalism Week")
         .onAppear {
-            // 2. Mark quest as viewed as soon as this page loads
-            viewModel.markQuestAsViewed()
+            // Safety fallback to ensure state updates if user lands directly here
+            viewModel.markVideoAsWatched()
         }
     }
 }
