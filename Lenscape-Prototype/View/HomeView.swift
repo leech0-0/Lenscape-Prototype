@@ -11,36 +11,30 @@ import AVKit
 struct HomeView: View {
     
     @State private var viewModel = QuestsViewModel()
+    @State private var completedViewModel = QuestsCompletedViewModel()
     
     var body: some View {
-        NavigationStack{
-            ScrollView{
-                
-                //titles
-                VStack(alignment: .leading, spacing: 4){
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    
+                    // App Title
                     Text("Lenscape")
                         .font(.title)
                         .bold()
-                        .padding()
+                        .padding(.horizontal)
                     
-                    Spacer()
-                    
-                    // Card Layout for Quests
-                Text("Weekly Quests")
+                    // MARK: - Weekly Quests Section
+                    Text("Weekly Quests")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .padding()
+                        .padding(.horizontal)
                     
-                    NavigationLink(destination: Group {
-                                            if viewModel.hasWatchedVideo {
-                                                QuestsView(viewModel: viewModel)
-                                            } else {
-                                                QuestsVideoView(viewModel: viewModel)
-                                            }
-                                        }) {
-                        HStack{
-                            
-                            VStack(){
+                    NavigationLink {
+                        destinationView
+                    } label: {
+                        HStack {
+                            VStack(alignment: .center, spacing: 12) {
                                 Text(viewModel.questTitle)
                                     .font(.title3)
                                     .fontWeight(.bold)
@@ -50,67 +44,57 @@ struct HomeView: View {
                                     .scaledToFit()
                                     .frame(width: 150, height: 150)
                                 
-                                Text(viewModel.buttonTitle) //fakebutton
+                                Text(viewModel.buttonTitle) // fake button
                                     .font(.title2)
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 20)
                                     .padding(.vertical, 10)
-                                    .background(Color(.blue), in: Capsule()) // change colour later
-                                
+                                    .background(Color.blue, in: Capsule())
                             }
-                            
-                            Spacer()
+                            .frame(maxWidth: .infinity)
                         }
                         .padding(20)
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(20)
                     }
                     .buttonStyle(.plain)
-                    .padding()
+                    .padding(.horizontal)
                     
-                    Spacer()
-                    
-                    // Card Layout for Festival
-                Text("Upcoming Events")
+                    // MARK: - Upcoming Events Section
+                    Text("Upcoming Events")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .padding()
+                        .padding(.horizontal)
                     
-                    NavigationLink(destination: FestivalsView()){ //TO BE CHANGED TO FESTIVALS
-                        HStack(){
-                            
-                            VStack(){
+                    NavigationLink {
+                        Text("Festivals View Placeholder")
+                    } label: {
+                        HStack {
+                            VStack(alignment: .center, spacing: 12) {
                                 Text("City North Shared Futures Festival")
                                     .font(.title3)
                                     .fontWeight(.bold)
                                 
-                                Spacer()
-                                
-                                HStack{
+                                HStack(spacing: 8) {
                                     Image(systemName: "calendar.badge.clock")
                                         .resizable()
-                                        .frame(width: 100, height: 90)
+                                        .scaledToFit()
+                                        .frame(width: 30, height: 30)
                                     
                                     Text("x days to go!")
                                         .fontWeight(.semibold)
                                 }
                                 
-                                Spacer()
-                               
-                                Text("See Details") //fakebutton
+                                Text("See Details") // fake button
                                     .font(.title2)
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 20)
                                     .padding(.vertical, 10)
-                                    .background(Color(.blue), in: Capsule()) // change colour later
-                                
-                                
-                                
+                                    .background(Color.blue, in: Capsule())
                             }
-                            
-                            Spacer()
+                            .frame(maxWidth: .infinity)
                         }
                         .padding(20)
                         .background(Color.gray.opacity(0.1))
@@ -119,12 +103,21 @@ struct HomeView: View {
                     .buttonStyle(.plain)
                     .padding(.horizontal)
                 }
+                .padding(.vertical)
             }
         }
     }
+    
+    // MARK: - Helper View Builder
+    @ViewBuilder
+    private var destinationView: some View {
+        if viewModel.hasWatchedVideo {
+            QuestsView()
+        } else {
+            QuestsVideoView(viewModel: viewModel)
+        }
+    }
 }
-
-
 
 // MARK: - Preview
 #Preview {

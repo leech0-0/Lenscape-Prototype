@@ -39,7 +39,7 @@ struct QuestsVideoView: View {
             Spacer()
             
             // Proceed to the actual QuestsView
-            NavigationLink(destination: QuestsView(viewModel: viewModel)) {
+            NavigationLink(destination: QuestsView()){
                 Text("Proceed to Quest")
                     .font(.headline)
                     .foregroundStyle(.white)
