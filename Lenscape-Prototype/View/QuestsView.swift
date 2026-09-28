@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct QuestsView: View {
+    // 1. Declare the view model property here
+    var viewModel: QuestsViewModel
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Quest Details")
+                .font(.largeTitle)
+                .bold()
+        }
+        .onAppear {
+            // 2. Mark quest as viewed as soon as this page loads
+            viewModel.markQuestAsViewed()
+        }
     }
 }
 
 #Preview {
-    QuestsView()
+    QuestsView(viewModel: QuestsViewModel())
 }
