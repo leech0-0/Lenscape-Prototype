@@ -52,7 +52,7 @@ struct QuestsVideoView: View {
                 viewModel.markVideoAsWatched()
             })
         }
-        .navigationTitle("Welcome Quest")
+        .navigationTitle("Weekly Quest Video")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

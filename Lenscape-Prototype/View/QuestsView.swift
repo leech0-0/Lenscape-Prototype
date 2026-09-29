@@ -54,6 +54,7 @@ struct QuestsView: View {
                 VStack(spacing: 12) {
                     ForEach(viewModel.questTasks) { task in
                         QuestTaskRow(task: task) {
+                            viewModel.completeTask(id: task.id)
                             selectedTaskForInput = task
                         }
                     }
@@ -65,7 +66,9 @@ struct QuestsView: View {
         .navigationTitle("Weekly Quest 1")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $selectedTaskForInput) { task in
-            QuestInputView(task: task)
+            QuestInputView(
+                viewModel: viewModel,
+                task: task)
         }
         .onAppear {
             viewModel.markVideoAsWatched()

@@ -3,7 +3,7 @@ import PhotosUI
 
 struct QuestInputView: View {
     @Environment(\.dismiss) private var dismiss
-    var viewModel = QuestsCompletedViewModel()
+    let viewModel: QuestsCompletedViewModel
     let task: QuestItem
 
     @State private var reflectionText: String = ""
@@ -184,5 +184,9 @@ struct CameraView: UIViewControllerRepresentable {
 }
 
 #Preview {
-    QuestInputView(task: QuestItem(title: "Sample Quest", description: "Sample Description", userReflection: ""))
+    QuestInputView(
+        viewModel: QuestsCompletedViewModel(),
+        task: QuestItem(
+            title: "Sample Quest",
+            description: "Sample Description"))
 }
