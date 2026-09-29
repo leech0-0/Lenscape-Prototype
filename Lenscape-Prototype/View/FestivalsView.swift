@@ -6,10 +6,24 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct FestivalsView: View {
     var body: some View {
-        Text("Festival page")
+        NavigationStack{
+            ScrollView{
+                VStack{
+                    Text("City North Shared Futures Festival")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Divider()
+                    
+                    Text("Watch last year's recap")
+                        .font(.title3)
+                }
+            }
+        }
     }
 }
 

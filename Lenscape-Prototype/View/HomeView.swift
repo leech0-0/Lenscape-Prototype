@@ -67,9 +67,7 @@ struct HomeView: View {
                         .fontWeight(.bold)
                         .padding(.horizontal)
                     
-                    NavigationLink {
-                        Text("Festivals View Placeholder")
-                    } label: {
+                    NavigationLink(destination: FestivalsView()){
                         HStack {
                             VStack(alignment: .center, spacing: 12) {
                                 Text("City North Shared Futures Festival")
