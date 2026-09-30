@@ -6,7 +6,15 @@
 import SwiftUI
 
 struct QuestsView: View {
-    @State private var viewModel = QuestsCompletedViewModel()
+    
+    @Environment(QuestsCompletedViewModel.self)
+    private var viewModel
+    
+    @Environment(CommunityViewModel.self)
+    private var communityViewModel
+    
+    
+    
     @State private var selectedTaskForInput: QuestItem? = nil
     
     var body: some View {
@@ -54,7 +62,10 @@ struct QuestsView: View {
                 VStack(spacing: 12) {
                     ForEach(viewModel.questTasks) { task in
                         QuestTaskRow(task: task) {
-                            viewModel.completeTask(id: task.id)
+                            
+                            // do NOT complete the task here
+                            // Completion happens after the reflection is submitted
+                            
                             selectedTaskForInput = task
                         }
                     }
@@ -68,6 +79,7 @@ struct QuestsView: View {
         .sheet(item: $selectedTaskForInput) { task in
             QuestInputView(
                 viewModel: viewModel,
+                communityViewModel: communityViewModel,
                 task: task)
         }
         .onAppear {

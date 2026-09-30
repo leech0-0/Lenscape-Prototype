@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct Lenscape_PrototypeApp: App {
+    
+    @State private var questsViewModel = QuestsCompletedViewModel()
+    
+    @State private var communityViewModel = CommunityViewModel()
+    
     var body: some Scene {
         WindowGroup {
             TabView{
@@ -34,6 +39,11 @@ struct Lenscape_PrototypeApp: App {
                     }
                 
             }
+            
+            //Shared ViewModels
+            .environment(questsViewModel)
+            .environment(communityViewModel)
+            
             
         }
     }

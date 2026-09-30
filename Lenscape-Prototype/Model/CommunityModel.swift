@@ -18,6 +18,10 @@ struct QuestItem: Identifiable {
 
 struct CommunityPost: Identifiable {
     let id = UUID()
+    
+    //Which task this reflection belongs to
+    let taskID: UUID
+    
     let questTitle: String
     let userReflection: String
     let dateSubmitted: Date = Date()

@@ -71,25 +71,33 @@ final class QuestsCompletedViewModel {
         currentQuest.isViewed = true
     }
     
-    //marks a task as completed
-    func completeTask(id:UUID) {
-        if let index = questTasks.firstIndex(where: { $0.id == id}) {
-            questTasks[index].isCompleted = true
+//MARK: - Submit Reflection
+    func submitReflection(
+        for taskID: UUID,
+        reflectionText: String,
+        communityViewModel: CommunityViewModel
+    ){
+        guard let index = questTasks.firstIndex(
+            where: { $0.id == taskID }
+        ) else {
+            return
         }
-    }
-    
-    // Saves user reflection and adds it to community view
-    func submitReflection(for taskID: UUID, reflectionText: String) {
-        if let index = questTasks.firstIndex(where: { $0.id == taskID }) {
-            questTasks[index].isCompleted = true
-            questTasks[index].userReflection = reflectionText
-            
-            let newPost = CommunityPost(
-                questTitle: questTasks[index].title,
-                userReflection: reflectionText
-            )
-            communityPosts.append(newPost)
-        }
+        
+        //Task is ONLY Completed after reflection is submitted
+        questTasks[index].isCompleted = true
+        
+        questTasks[index].userReflection = reflectionText
+        
+        //Create community post
+        let newPost = CommunityPost(
+            taskID: taskID,
+            questTitle: questTasks[index].title,
+            userReflection: reflectionText
+        )
+        
+        
+        //Send reflection to Community
+        communityViewModel.addPost(post: newPost)
     }
 }
 

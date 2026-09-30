@@ -4,6 +4,7 @@ import PhotosUI
 struct QuestInputView: View {
     @Environment(\.dismiss) private var dismiss
     let viewModel: QuestsCompletedViewModel
+    let communityViewModel: CommunityViewModel
     let task: QuestItem
 
     @State private var reflectionText: String = ""
@@ -93,7 +94,9 @@ struct QuestInputView: View {
             Spacer()
 
             Button {
-                viewModel.submitReflection(for: task.id, reflectionText: reflectionText)
+                viewModel.submitReflection(for: task.id,
+                        reflectionText: reflectionText,
+                        communityViewModel: communityViewModel)
                 dismiss()
             } label: {
                 Text("Submit Reflection")
@@ -186,6 +189,7 @@ struct CameraView: UIViewControllerRepresentable {
 #Preview {
     QuestInputView(
         viewModel: QuestsCompletedViewModel(),
+        communityViewModel: CommunityViewModel(),
         task: QuestItem(
             title: "Sample Quest",
             description: "Sample Description"))
