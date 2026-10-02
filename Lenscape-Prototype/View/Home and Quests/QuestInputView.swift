@@ -14,6 +14,7 @@ struct QuestInputView: View {
     @State private var selectedPickerItem: PhotosPickerItem?
     @State private var showCamera: Bool = false
     @State private var showImageSourceDialog: Bool = false
+    @State private var showPhotoPicker = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -115,21 +116,33 @@ struct QuestInputView: View {
             reflectionText = task.userReflection
         }
         // Source Selection Action Sheet
-        .confirmationDialog("Choose Photo Source", isPresented: $showImageSourceDialog, titleVisibility: .visible) {
+        .confirmationDialog(
+            "Choose Photo Source",
+            isPresented: $showImageSourceDialog,
+            titleVisibility: .visible
+        ) {
+
             Button("Take Photo") {
-                if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                    showCamera = true
-                } else {
-                    print("Camera is unavailable on this device or simulator.")
+
+                guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+                    print("Camera is unavailable.")
+                    return
                 }
+
+                showCamera = true
             }
 
-            PhotosPicker(selection: $selectedPickerItem, matching: .images) {
-                Text("Choose from Library")
+            Button("Choose from Library") {
+                showPhotoPicker = true
             }
 
             Button("Cancel", role: .cancel) {}
         }
+        .photosPicker(
+            isPresented: $showPhotoPicker,
+            selection: $selectedPickerItem,
+            matching: .images
+        )
         // Load Selected Photo from Library
         .onChange(of: selectedPickerItem) { _, newItem in
             Task {
@@ -150,37 +163,72 @@ struct QuestInputView: View {
 
 // MARK: - UIKit Camera View Bridge
 struct CameraView: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
-    @Environment(\.dismiss) private var dismiss
 
-    func makeUIViewController(context: Context) -> UIImagePickerController {
+    @Binding var image: UIImage?
+
+    @Environment(\.dismiss)
+    private var dismiss
+
+
+    func makeUIViewController(
+        context: Context
+    ) -> UIImagePickerController {
+
         let picker = UIImagePickerController()
-        picker.sourceType = .camera
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+        }
+
         picker.delegate = context.coordinator
+
         return picker
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func updateUIViewController(
+        _ uiViewController: UIImagePickerController,
+        context: Context
+    ) {
+    }
+
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
 
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    final class Coordinator:
+        NSObject,
+        UIImagePickerControllerDelegate,
+        UINavigationControllerDelegate {
+
         let parent: CameraView
+
 
         init(_ parent: CameraView) {
             self.parent = parent
         }
 
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        func imagePickerController(
+            _ picker: UIImagePickerController,
+            didFinishPickingMediaWithInfo info:
+                [UIImagePickerController.InfoKey: Any]
+        ) {
+
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.image = uiImage
             }
+
             parent.dismiss()
         }
 
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+
+        func imagePickerControllerDidCancel(
+            _ picker: UIImagePickerController
+        ) {
+
             parent.dismiss()
         }
     }
