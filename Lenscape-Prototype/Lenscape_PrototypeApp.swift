@@ -14,6 +14,8 @@ struct Lenscape_PrototypeApp: App {
     
     @State private var communityViewModel = CommunityViewModel()
     
+    @State private var archiveViewModel = ArchiveViewModel()
+    
     var body: some Scene {
         WindowGroup {
             TabView{
@@ -43,6 +45,7 @@ struct Lenscape_PrototypeApp: App {
             //Shared ViewModels
             .environment(questsViewModel)
             .environment(communityViewModel)
+            .environment(archiveViewModel)
             
             
         }

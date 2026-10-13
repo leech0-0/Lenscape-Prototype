@@ -96,6 +96,8 @@ struct QuestInputView: View {
                 Spacer()
                 
                 Button {
+                    let photoData = selectedImage?.jpegData(compressionQuality: 0.8)
+                    
                     viewModel.submitReflection(for: task.id,
                                                reflectionText: reflectionText,
                                                communityViewModel: communityViewModel)
@@ -106,9 +108,9 @@ struct QuestInputView: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(reflectionText.isEmpty ? Color.gray : Color.blue, in: Capsule())
+                        .background(reflectionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray : Color.blue, in: Capsule())
                 }
-                .disabled(reflectionText.isEmpty)
+                .disabled(reflectionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
             .padding()
             .navigationTitle("Log Reflection")

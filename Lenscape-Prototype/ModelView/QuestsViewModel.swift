@@ -75,6 +75,7 @@ final class QuestsCompletedViewModel {
     func submitReflection(
         for taskID: UUID,
         reflectionText: String,
+        imageData: Data? = nil,
         communityViewModel: CommunityViewModel
     ){
         guard let index = questTasks.firstIndex(
@@ -83,20 +84,30 @@ final class QuestsCompletedViewModel {
             return
         }
         
-        //Task is ONLY Completed after reflection is submitted
+        let cleanedReflection = reflectionText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard !cleanedReflection.isEmpty else {
+            return
+        }
+        
+        let submissionDate = Date()
+        
+       //Update the task that will be displayed in the archive.
         questTasks[index].isCompleted = true
+        questTasks[index].userReflection = cleanedReflection
+        questTasks[index].reflectionDate = submissionDate
+        questTasks[index].imageData = imageData
         
-        questTasks[index].userReflection = reflectionText
         
-        //Create community post
+        // Make the reflection available to Community
         let newPost = CommunityPost(
             taskID: taskID,
             questTitle: questTasks[index].title,
-            userReflection: reflectionText
+            userReflection: cleanedReflection,
+            dateSubmitted: submissionDate,
+            imageData: imageData
         )
         
-        
-        //Send reflection to Community
         communityViewModel.addPost(post: newPost)
     }
 }
