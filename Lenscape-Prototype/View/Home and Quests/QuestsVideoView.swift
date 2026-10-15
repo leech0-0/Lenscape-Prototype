@@ -26,7 +26,7 @@ struct QuestsVideoView: View {
             
             // Embedded Video Player
             VideoPlayer(player: player)
-                .frame(height: 240)
+                .frame(height: 660)
                 .cornerRadius(16)
                 .padding(.horizontal)
                 .onAppear {
