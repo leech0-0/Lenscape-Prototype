@@ -11,11 +11,91 @@ import Observation
 @Observable
 final class ArchiveViewModel {
     
+    
     //MARK: - Completed Weekly Quests that have been archived.
     
     var archivedWeeks: [ArchivedWeek] = []
     
-    init() {}
+    init() { // MARK: - Preloaded Archive: Weekly Quest 1
+        
+        archivedWeeks.append(
+            ArchivedWeek(
+                title: "Regeneration",
+                date: Calendar.current.date(
+                    from: DateComponents(
+                        year: 2026,
+                        month: 09,
+                        day: 29
+                    )
+                )!,
+                tasks: [
+                    // Task 1
+                    QuestItem(
+                        title: "Rohit believes games can help people imagine a better future...",
+                        description: "Take a moment to make one with for a better change in the future",
+                        isCompleted: true,
+                        userReflection: "TESTER REFLECTION - Quest 1"
+                    ),
+
+                    // Task 2
+                    QuestItem(
+                        title: "'The beauty of the game or the fun comes from different perspectives that are coming together'",
+                        description: "Ask someone what they wish for a better future",
+                        isCompleted: true,
+                        userReflection: "TESTER REFLECTION - Quest 2"
+                    ),
+
+                    // Task 3
+                    QuestItem(
+                        title: "'What would I do if I have given that power or responsibility to bring the change?'",
+                        description: "Share one suggestion for improving your neighbourhood in our community reflection",
+                        isCompleted: true,
+                        userReflection: "TESTER REFLECTION - Quest 3"
+                    )
+                ]
+            )
+        )
+
+        // MARK: - Preloaded Archive: Weekly Quest 2
+
+        archivedWeeks.append(
+            ArchivedWeek(
+                title: "Urban and Public Spaces",
+                date: Calendar.current.date(
+                    from: DateComponents(
+                        year: 2026,
+                        month: 10,
+                        day: 2
+                    )
+                )!,
+                tasks: [
+                    // Task 1
+                    QuestItem(
+                        title: "Use your maps to find a park or green space in your city that you haven't gone to before",
+                        description: "'I think I pass by a lot of green spaces and different gardens apart from Carlton Gardens'",
+                        isCompleted: true,
+                        userReflection: "TESTER REFLECTION - Quest 1"
+                    ),
+
+                    // Task 2
+                    QuestItem(
+                        title: "Share a new place you've discovered with someone",
+                        description: "'Whenever I take a walk in any direction, I find something new'",
+                        isCompleted: true,
+                        userReflection: "TESTER REFLECTION - Quest 2"
+                    ),
+
+                    // Task 3
+                    QuestItem(
+                        title: "Visit a local library, park or market with someone",
+                        description: "'I also want to go to the mighty Carlton Library right after class'",
+                        isCompleted: true,
+                        userReflection: "TESTER REFLECTION - Quest 3"
+                    )
+                ]
+            )
+        )
+    }
     
     //MARK: - Weekly Quest Archive
     
@@ -83,4 +163,6 @@ final class ArchiveViewModel {
     func memoryCount(in week: ArchivedWeek) -> Int {
         week.memories.count
     }
+    
+    
 }

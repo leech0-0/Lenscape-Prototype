@@ -256,6 +256,7 @@
 				DEVELOPMENT_TEAM = HMH3JUWSUZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Lenscape;
 				INFOPLIST_KEY_NSCameraUsageDescription = "\"Lenscape needs access to your camera to let you add photos to your quest reflections\"";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"Lenscape needs access to your photos so you can add images to your quest reflection.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -290,6 +291,7 @@
 				DEVELOPMENT_TEAM = HMH3JUWSUZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Lenscape;
 				INFOPLIST_KEY_NSCameraUsageDescription = "\"Lenscape needs access to your camera to let you add photos to your quest reflections\"";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"Lenscape needs access to your photos so you can add images to your quest reflection.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
