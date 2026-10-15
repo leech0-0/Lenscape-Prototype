@@ -11,7 +11,7 @@ struct QuestsVideoView: View {
     
     //initialise AVPlayer with local video
     var player: AVPlayer {
-        if let url = Bundle.main.url(forResource: "placeholderVideo", withExtension: "MOV") {
+        if let url = Bundle.main.url(forResource: "commConnectionVideo", withExtension: "MOV") {
             return AVPlayer(url: url)
         }
         return AVPlayer()
