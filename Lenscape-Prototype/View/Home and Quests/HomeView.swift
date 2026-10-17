@@ -35,7 +35,8 @@ struct HomeView: View {
                     Image("homeGraphic")
                         .resizable()
                         .scaledToFit()
-                        .offset(y: -100)
+                        .offset(y: -236)
+                        .ignoresSafeArea()
                 
                 ScrollView {
                     
