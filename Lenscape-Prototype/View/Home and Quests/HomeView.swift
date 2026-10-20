@@ -13,68 +13,109 @@ struct HomeView: View {
     @State private var viewModel = QuestsViewModel()
     @State private var completedViewModel = QuestsCompletedViewModel()
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         NavigationStack {
-            
-            ZStack{
+            ZStack(alignment: .top) {
                 
+                // MARK: - Background Gradient
                 LinearGradient(
-                    gradient: Gradient (colors: [
-                        Color.blue,
+                    gradient: Gradient(colors: [
                         Color.blue.opacity(0.6),
-                        Color.clear
+                                Color.blue.opacity(0.3),
+                                colorScheme == .dark
+                                    ? Color.gray.opacity(0.3)
+                                    : Color.yellow.opacity(0.3),
+                                colorScheme == .dark
+                                    ? Color.gray.opacity(0.5)
+                                    : Color.yellow.opacity(0.5)
                     ]),
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .containerRelativeFrame(.vertical) { height, axis in
-                    height / 3 }
-                .frame(maxHeight: .infinity, alignment: .top)
                 .ignoresSafeArea()
                 
-                    Image("homeGraphic")
+                // MARK: - Decorative Background Images
+                ZStack {
+                    Image("homeShapesLM")
                         .resizable()
                         .scaledToFit()
-                        .offset(y: -236)
-                        .ignoresSafeArea()
-                
-                ScrollView {
+                        .frame(width: 475, height: 500)
+                        .offset(y: 100)
                     
-                    VStack{
-                        Image("titleLM")
+                    Image("purpleHexagonLM")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 150)
+                        .offset(x: 150, y: -90)
+                }
+                .frame(height: 200)
+                
+                Spacer()
+                
+                
+                // MARK: - Scrollable Home Content
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        
+                        // MARK: - Title
+                        Image(colorScheme == .dark ? "titleDM" : "titleLM")
                             .resizable()
-                            .frame(width: 280, height: 60)
-                            .padding()
-                            .offset(x: -35)
+                            .scaledToFit()
+                            .frame(maxWidth: 250)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 40)
+                            .padding(.top, 12)
                         
-                    }
+                        Spacer(minLength: 150)
                         
-                    VStack(alignment: .leading, spacing: 16) {
-                        
-                        Spacer(minLength: 200)
-                        
-                        // MARK: - Weekly Quests Section
-                        Text("Weekly Quests")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.horizontal)
-                        
-                        NavigationLink {
-                            destinationView
-                        } label: {
-                            HStack {
-                                VStack(alignment: .center, spacing: 12) {
+                        // MARK: - Weekly Quests
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Weekly Quests")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.horizontal, 30)
+                            
+                            NavigationLink {
+                                destinationView
+                            } label: {
+                                VStack(spacing: 12) {
                                     Text(viewModel.questTitle)
                                         .font(.title3)
                                         .fontWeight(.bold)
+                                        .multilineTextAlignment(.center)
                                     
-                                    Image("placeholder")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 150, height: 150)
+                                    HStack {
+                                        Image("badgeComCon0")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(maxWidth: 130)
+                                            .frame(height: 120)
+                                        
+                                        VStack{
+                                            
+                                            Text("A new challenge is waiting...")
+                                                .font(.subheadline)
+                                                .fontWeight(.semibold)
+                                                .fixedSize(
+                                                    horizontal: false,
+                                                    vertical: true)
+                                                .padding(.vertical, 10)
+                                            
+                                            
+                                            Text("Follow along with this week's story to earn the badge!")
+                                                .font(.subheadline)
+                                                .fontWeight(.semibold)
+                                                .fixedSize(
+                                                    horizontal: false,
+                                                    vertical: true)
+                                        }
+                                    }
                                     
-                                    Text(viewModel.buttonTitle) // fake button
-                                        .font(.title2)
+                                    Text(viewModel.buttonTitle)
+                                        .font(.headline)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.white)
                                         .padding(.horizontal, 20)
@@ -82,59 +123,107 @@ struct HomeView: View {
                                         .background(Color.blue, in: Capsule())
                                 }
                                 .frame(maxWidth: .infinity)
+                                .padding(16)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .fill(Color("homePageCard"))
+                                        .shadow(
+                                            color: .blue.opacity(0.8),
+                                            radius: 0,
+                                            x: 7,
+                                            y: 7
+                                        )
+                                )
+                                .contentShape(
+                                    RoundedRectangle(cornerRadius: 20)
+                                )
                             }
-                            .padding(20)
-                            .background(Color.white)
-                            .cornerRadius(20)
+                            .buttonStyle(.plain)
+                            .padding(.horizontal, 40)
                         }
-                        .buttonStyle(.plain)
-                        .padding(.horizontal)
                         
-                        // MARK: - Upcoming Events Section
-                        Text("Upcoming Events")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.horizontal)
-                        
-                        NavigationLink(destination: FestivalsView()){
-                            HStack {
-                                VStack(alignment: .center, spacing: 12) {
+                        // MARK: - Upcoming Events
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Upcoming Events")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.horizontal, 30)
+                            
+                            NavigationLink {
+                                FestivalsView()
+                            } label: {
+                                VStack(spacing: 12) {
                                     Text("City North Shared Futures Festival")
                                         .font(.title3)
                                         .fontWeight(.bold)
+                                        .multilineTextAlignment(.center)
                                     
                                     HStack(spacing: 8) {
-                                        Image(systemName: "calendar.badge.clock")
+                                        Image("badgeFestivalFull")
                                             .resizable()
                                             .scaledToFit()
-                                            .frame(width: 30, height: 30)
+                                            .frame(maxWidth: 130)
+                                            .frame(height: 120)
                                         
-                                        Text("x days to go!")
+                                        VStack{
+                                            
+                                        Text("This event occured on the 3rd of October")
+                                            .font(.subheadline)
                                             .fontWeight(.semibold)
+                                            .fixedSize(
+                                                horizontal: false,
+                                                vertical: true)
+                                            .padding(.vertical, 10)
+                                            
+                                            Text("View the Festival Memories in Archive!")
+                                                .font(.subheadline)
+                                                .fontWeight(.semibold)
+                                                .fixedSize(
+                                                    horizontal: false,
+                                                    vertical: true)
                                     }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                     
-                                    Text("See Details") // fake button
-                                        .font(.title2)
+                                    
+                                    Text("View Festival Memories") //fake button
+                                        .font(.headline)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.white)
                                         .padding(.horizontal, 20)
                                         .padding(.vertical, 10)
-                                        .background(Color.blue, in: Capsule())
+                                        .background(Color.orange, in: Capsule())
                                 }
                                 .frame(maxWidth: .infinity)
+                                .padding(16)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .fill(Color("homePageCard"))
+                                        .shadow(
+                                            color: .orange.opacity(0.8),
+                                            radius: 0,
+                                            x: 7,
+                                            y: 7
+                                        ))
+                                .contentShape(
+                                    RoundedRectangle(cornerRadius: 20)
+                                )
                             }
-                            .padding(20)
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(20)
+                            .buttonStyle(.plain)
+                            .padding(.horizontal, 40)
                         }
-                        .buttonStyle(.plain)
-                        .padding(.horizontal)
                     }
-                    .padding(.vertical)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 24)
+                    .frame(maxWidth: 600)
+                    .frame(maxWidth: .infinity)
                 }
+                .scrollIndicators(.hidden)
             }
         }
     }
+    
     
     // MARK: - Helper View Builder
     @ViewBuilder
