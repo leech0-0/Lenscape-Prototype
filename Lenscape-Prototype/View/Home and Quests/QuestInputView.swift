@@ -1,61 +1,83 @@
+//
+//
+// Quest Input View
+//
+
 import SwiftUI
 import PhotosUI
 
 struct QuestInputView: View {
     @Environment(\.dismiss) private var dismiss
+
     let viewModel: QuestsCompletedViewModel
     let communityViewModel: CommunityViewModel
     let task: QuestItem
-    
-    @State private var reflectionText: String = ""
-    
-    // Photo selection state
+
+    // MARK: - Photo Selection State
     @State private var selectedImage: UIImage?
     @State private var selectedPickerItem: PhotosPickerItem?
-    @State private var showCamera: Bool = false
-    @State private var showImageSourceDialog: Bool = false
+    @State private var showCamera = false
+    @State private var showImageSourceDialog = false
     @State private var showPhotoPicker = false
-    
+
+    // MARK: - Reflection State
+    @State private var reflectionText = ""
+    @FocusState private var isReflectionFocused: Bool
+
     var body: some View {
-        ScrollView{
+        ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                
-                VStack {
+
+                // MARK: - Header
+                VStack(alignment: .leading, spacing: 12) {
                     Text("Task Completed!")
                         .font(.title)
                         .fontWeight(.bold)
-                    
+
                     HStack {
                         Text("How do you feel about the quest?")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        
+
                         Spacer()
-                        
-                        ZStack {
-                            Image("placeholder")
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                                .offset(x: -20)
-                        }
+
+                        Image("placeholder")
+                            .resizable()
+                            .frame(width: 100, height: 100)
                     }
                 }
-                
+
+                // MARK: - Quest Details
                 Text(task.title)
                     .font(.title3)
                     .fontWeight(.semibold)
-                
+
                 Text(task.description)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                
+
+                // MARK: - Reflection Editor
                 TextEditor(text: $reflectionText)
+                    .focused($isReflectionFocused)
+                    .scrollContentBackground(.hidden)
                     .padding(8)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(12)
                     .frame(height: 140)
-                
-                // MARK: - Image Display or Selection Trigger
+                    .background(Color.gray.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(
+                                isReflectionFocused ? Color.blue : Color.gray.opacity(0.3),
+                                lineWidth: 1
+                            )
+                            .allowsHitTesting(false)
+                    }
+                    .accessibilityLabel("Your reflection")
+                    .onTapGesture {
+                        isReflectionFocused = true
+                    }
+
+                // MARK: - Selected Photo
                 if let selectedImage {
                     ZStack(alignment: .topTrailing) {
                         Image(uiImage: selectedImage)
@@ -63,21 +85,28 @@ struct QuestInputView: View {
                             .scaledToFill()
                             .frame(maxWidth: .infinity)
                             .frame(height: 180)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                        
+                            .clipped()
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: 12)
+                            )
+
                         Button {
                             self.selectedImage = nil
                             self.selectedPickerItem = nil
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
-                                .foregroundColor(.white)
-                                .background(Circle().fill(Color.black.opacity(0.6)))
+                                .foregroundStyle(.white)
+                                .background(
+                                    Circle().fill(Color.black.opacity(0.6))
+                                )
                         }
                         .padding(8)
                     }
                 } else {
+                    // MARK: - Add Photo Button
                     Button {
+                        isReflectionFocused = false
                         showImageSourceDialog = true
                     } label: {
                         HStack {
@@ -88,19 +117,19 @@ struct QuestInputView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.blue.opacity(0.1))
-                        .foregroundColor(.blue)
-                        .cornerRadius(10)
+                        .foregroundStyle(.blue)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                 }
-                
-                Spacer()
-                
+
+                // MARK: - Submit Reflection
                 Button {
-                    let photoData = selectedImage?.jpegData(compressionQuality: 0.8)
-                    
-                    viewModel.submitReflection(for: task.id,
-                                               reflectionText: reflectionText,
-                                               communityViewModel: communityViewModel)
+                    viewModel.submitReflection(
+                        for: task.id,
+                        reflectionText: reflectionText,
+                        communityViewModel: communityViewModel
+                    )
+
                     dismiss()
                 } label: {
                     Text("Submit Reflection")
@@ -108,141 +137,164 @@ struct QuestInputView: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(reflectionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray : Color.blue, in: Capsule())
+                        .background(
+                            reflectionText.trimmingCharacters(
+                                in: .whitespacesAndNewlines
+                            ).isEmpty ? Color.gray : Color.blue,
+                            in: Capsule()
+                        )
                 }
-                .disabled(reflectionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .disabled(
+                    reflectionText.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    ).isEmpty
+                )
             }
             .padding()
-            .navigationTitle("Log Reflection")
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                reflectionText = task.userReflection
-            }
-            // Source Selection Action Sheet
-            .confirmationDialog(
-                "Choose Photo Source",
-                isPresented: $showImageSourceDialog,
-                titleVisibility: .visible
-            ) {
-                
-                Button("Take Photo") {
-                    
-                    guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-                        print("Camera is unavailable.")
-                        return
-                    }
-                    
-                    showCamera = true
+        }
+        .navigationTitle("Log Reflection")
+        .navigationBarTitleDisplayMode(.inline)
+        .scrollDismissesKeyboard(.interactively)
+
+        // MARK: - Load Existing Reflection
+        .onAppear {
+            reflectionText = task.userReflection
+        }
+
+        // MARK: - Choose Photo Source
+        .confirmationDialog(
+            "Choose Photo Source",
+            isPresented: $showImageSourceDialog,
+            titleVisibility: .visible
+        ) {
+            Button("Take Photo") {
+                guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+                    print("Camera is unavailable.")
+                    return
                 }
-                
-                Button("Choose from Library") {
-                    showPhotoPicker = true
+
+                showCamera = true
+            }
+
+            Button("Choose from Library") {
+                showPhotoPicker = true
+            }
+
+            Button("Cancel", role: .cancel) {}
+        }
+
+        // MARK: - Photo Library
+        .photosPicker(
+            isPresented: $showPhotoPicker,
+            selection: $selectedPickerItem,
+            matching: .images
+        )
+        .onChange(of: selectedPickerItem) { _, newItem in
+            Task {
+                guard let newItem,
+                      let data = try? await newItem.loadTransferable(type: Data.self),
+                      let image = UIImage(data: data) else {
+                    return
                 }
-                
-                Button("Cancel", role: .cancel) {}
-            }
-            .photosPicker(
-                isPresented: $showPhotoPicker,
-                selection: $selectedPickerItem,
-                matching: .images
-            )
-            // Load Selected Photo from Library
-            .onChange(of: selectedPickerItem) { _, newItem in
-                Task {
-                    if let data = try? await newItem?.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data) {
-                        await MainActor.run {
-                            self.selectedImage = image
-                        }
-                    }
+
+                await MainActor.run {
+                    selectedImage = image
                 }
             }
-            // Camera Modal
-            .sheet(isPresented: $showCamera) {
-                CameraView(image: $selectedImage)
+        }
+        .onChange(of: showPhotoPicker) { _, isShowing in
+            if !isShowing {
+                restoreTextEditorFocus()
             }
+        }
+        .sheet(isPresented: $showCamera,
+               onDismiss: {
+            restoreTextEditorFocus()
+        }
+        ) {
+            CameraView(image: $selectedImage, isPresented: $showCamera)
         }
     }
     
-    // MARK: - UIKit Camera View Bridge
+    // MARK :-  fixing up error with textinput
+    private func restoreTextEditorFocus() {
+        Task { @MainActor in
+            //allow the photo interface to finish dissmissing
+            try? await Task.sleep(for: .milliseconds(500))
+            
+            //Restore focus to the reflection editor
+            isReflectionFocused = true
+        }
+    }
+
+    // MARK: - Camera View
     struct CameraView: UIViewControllerRepresentable {
-        
         @Binding var image: UIImage?
-        
-        @Environment(\.dismiss)
-        private var dismiss
-        
-        
+        @Binding var isPresented: Bool
+        @Environment(\.dismiss) private var dismiss
+
         func makeUIViewController(
             context: Context
         ) -> UIImagePickerController {
-            
             let picker = UIImagePickerController()
-            
+
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 picker.sourceType = .camera
             }
-            
+
             picker.delegate = context.coordinator
-            
             return picker
         }
-        
-        
+
         func updateUIViewController(
             _ uiViewController: UIImagePickerController,
             context: Context
-        ) {
-        }
-        
-        
+        ) {}
+
         func makeCoordinator() -> Coordinator {
             Coordinator(self)
         }
-        
-        
-        final class Coordinator:
-            NSObject,
-            UIImagePickerControllerDelegate,
-            UINavigationControllerDelegate {
-            
+
+        final class Coordinator: NSObject,
+                                 UIImagePickerControllerDelegate,
+                                 UINavigationControllerDelegate {
             let parent: CameraView
-            
-            
+
             init(_ parent: CameraView) {
                 self.parent = parent
             }
-            
-            
+
             func imagePickerController(
                 _ picker: UIImagePickerController,
-                didFinishPickingMediaWithInfo info:
-                [UIImagePickerController.InfoKey: Any]
+                didFinishPickingMediaWithInfo info: [
+                    UIImagePickerController.InfoKey: Any
+                ]
             ) {
-                
                 if let uiImage = info[.originalImage] as? UIImage {
                     parent.image = uiImage
                 }
-                
-                parent.dismiss()
+
+                parent.isPresented = false
             }
-            
-            
+
             func imagePickerControllerDidCancel(
                 _ picker: UIImagePickerController
             ) {
-                
-                parent.dismiss()
+                parent.isPresented = false
             }
         }
     }
 }
-
-#Preview {
-    QuestInputView(
-        viewModel: QuestsCompletedViewModel(),
-        communityViewModel: CommunityViewModel(),
-        task: QuestItem(
-            title: "Sample Quest",
-            description: "Sample Description"))
-}
+    
+    #Preview {
+        NavigationStack {
+            QuestInputView(
+                viewModel: QuestsCompletedViewModel(),
+                communityViewModel: CommunityViewModel(),
+                task: QuestItem(
+                    title: "Sample Quest",
+                    description: "Sample Description"
+                )
+            )
+        }
+    }
