@@ -13,78 +13,98 @@ struct QuestsView: View {
     @Environment(CommunityViewModel.self)
     private var communityViewModel
     
-    
+    @Environment(\.colorScheme) private var colorScheme
     
     @State private var selectedTaskForInput: QuestItem? = nil
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+        NavigationStack{
+            // MARK: - Background Gradient
+            ZStack(alignment: .top) {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.blue.opacity(0.8),
+                        Color.blue.opacity(0.5),
+                        colorScheme == .dark
+                        ? Color.gray.opacity(0.3)
+                        : Color.white.opacity(0.3),
+                        colorScheme == .dark
+                        ? Color.gray.opacity(0.5)
+                        : Color.white.opacity(0.5)
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
                 
-                // MARK: - Title Card
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Community Connection Quests")
+                
+            ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        
+                        // MARK: - Title Card
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Community Connection Quests")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                
+                                Button {
+                                    // Expand/details logic
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Text("See details")
+                                        Image(systemName: "chevron.right")
+                                    }
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.blue)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            Image(viewModel.communityBadgeImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 100)
+                                .animation(.easeInOut(duration: 0.3), value: viewModel.completedReflectionCount)
+                        }
+                        .padding(20)
+                        .background(Color.blue.opacity(0.15))
+                        .cornerRadius(20)
+                        .padding(.horizontal)
+                        
+                        // MARK: - Quests Section
+                        Text("Quests")
                             .font(.title2)
                             .fontWeight(.bold)
+                            .padding(.horizontal)
                         
-                        Button {
-                            // Expand/details logic
-                        } label: {
-                            HStack(spacing: 4) {
-                                Text("See details")
-                                Image(systemName: "chevron.right")
+                        VStack(spacing: 12) {
+                            ForEach(viewModel.questTasks) { task in
+                                QuestTaskRow(task: task) {
+                                    
+                                    // do NOT complete the task here
+                                    // Completion happens after the reflection is submitted
+                                    
+                                    selectedTaskForInput = task
+                                }
                             }
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.blue)
                         }
+                        .padding(.horizontal)
                     }
-                    
-                    Spacer()
-                    
-                    Image(viewModel.communityBadgeImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .animation(.easeInOut(duration: 0.3), value: viewModel.completedReflectionCount)
+                    .padding(.vertical)
                 }
-                .padding(20)
-                .background(Color.blue.opacity(0.15))
-                .cornerRadius(20)
-                .padding(.horizontal)
-                
-                // MARK: - Quests Section
-                Text("Quests")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding(.horizontal)
-                
-                VStack(spacing: 12) {
-                    ForEach(viewModel.questTasks) { task in
-                        QuestTaskRow(task: task) {
-                            
-                            // do NOT complete the task here
-                            // Completion happens after the reflection is submitted
-                            
-                            selectedTaskForInput = task
-                        }
-                    }
+                .sheet(item: $selectedTaskForInput) { task in
+                    QuestInputView(
+                        viewModel: viewModel,
+                        communityViewModel: communityViewModel,
+                        task: task)
                 }
-                .padding(.horizontal)
+                .onAppear {
+                    viewModel.markVideoAsWatched()
+                }
             }
-            .padding(.vertical)
-        }
-        .navigationTitle("Weekly Quest 1")
-        .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $selectedTaskForInput) { task in
-            QuestInputView(
-                viewModel: viewModel,
-                communityViewModel: communityViewModel,
-                task: task)
-        }
-        .onAppear {
-            viewModel.markVideoAsWatched()
         }
     }
 }
