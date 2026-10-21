@@ -39,13 +39,13 @@ struct HomeView: View {
                 
                 // MARK: - Decorative Background Images
                 ZStack {
-                    Image("homeShapesLM")
+                    Image(colorScheme == .dark ? "homeShapesDM" : "homeShapesLM")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 475, height: 500)
                         .offset(y: 100)
                     
-                    Image("purpleHexagonLM")
+                    Image(colorScheme == .dark ? "purpleHexagonDM" : "purpleHexagonLM")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 150, height: 150)

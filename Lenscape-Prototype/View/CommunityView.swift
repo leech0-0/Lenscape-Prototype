@@ -5,6 +5,7 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 struct CommunityView: View {
     
@@ -16,16 +17,23 @@ struct CommunityView: View {
     
     @Query private var communityPosts: [CommunityPost]
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20){
                     
                     //MARK: - Header
-                    
-                    Text("Community")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                    HStack{
+                        Text("Community")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        
+                        Image(colorScheme == .dark ? "communityDM" : "communityLM")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
                     
                     //MARK: - Theme
                     Text("Theme selected")
@@ -73,8 +81,8 @@ struct CommunityView: View {
                             VStack(spacing: 14) {
                                 
                                 ForEach(posts) { post in
-                                
-                                CommunityPostCard(post: post)
+                                    
+                                    CommunityPostCard(post: post)
                                 }
                             }
                         }
@@ -110,7 +118,7 @@ struct QuestButton: View {
     let index: Int
     let isSelected: Bool
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action) {
             Text("Quest \(index + 1)")
@@ -154,44 +162,51 @@ struct CommunityLockedView: View {
         
     }
 }
+
+//MARK: - CommunityPostCard
+
+struct CommunityPostCard: View {
+    let post: CommunityPost
     
-    //MARK: - CommunityPostCard
-    
-    struct CommunityPostCard: View {
-        let post: CommunityPost
-        
-        var body: some View {
-            HStack(alignment: .top, spacing: 14) {
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            
+            // Reflection photo
+            if let imageData = post.imageData,
+               let uiImage = UIImage(data: imageData) {
                 
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(post.questTitle)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                    
-                    Text("Quest @user")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    
-                    Text(post.userReflection)
-                        .font(.subheadline)
-                        .lineLimit(4)
-                    
-                    
-                    Text(post.dateSubmitted.formatted(
-                        date: .abbreviated,
-                        time: .omitted
-                    ))
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 110, height: 110)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 12)
+                    )
+            }
+            
+            // Reflection text
+            VStack(alignment: .leading, spacing: 8) {
+                Text(post.questTitle)
+                    .font(.headline)
+                
+                Text(post.userReflection)
+                    .font(.body)
+                    .fixedSize(
+                        horizontal: false,
+                        vertical: true
+                    )
+                
+                Text(post.dateSubmitted, style: .date)
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                }
-                
-                Spacer()
             }
-            .padding(12)
-            .background(Color.white, in: RoundedRectangle(cornerRadius: 18))
-            .overlay {
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            Color(.secondarySystemBackground),
+            in: RoundedRectangle(cornerRadius: 16)
+        )
     }
+}

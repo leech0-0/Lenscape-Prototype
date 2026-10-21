@@ -44,20 +44,20 @@ final class QuestsCompletedViewModel {
         QuestItem(
             id: UUID(uuidString:
                         "11111111-1111-1111-1111-111111111111")!,
-            title: "Jezlyne thinks that food always connects people...",
-            description: "Find a local place you would love to visit and plan to go with a friend"
+            title: "Find a local place you would love to visit and plan to go with a friend ",
+            description: "Jezlyne thinks that food always connects people..."
         ),
         QuestItem(
             id: UUID(uuidString:
                         "22222222-2222-2222-2222-222222222222")!,
-            title: "'It's OK to rest...",
-            description: "Remind someone it's OK to take a break"
+            title: "Remind someone it's OK to take a break",
+            description: "'It's OK to rest...'"
         ),
         QuestItem(
             id: UUID(uuidString:
                         "33333333-3333-3333-3333-333333333333")!,
-            title: "'One of the ways to have fun could be from going to cafe's...",
-            description: "Plan a time to catch up with someone that you haven't seen in a while"
+            title: "Plan a time to catch up with someone that you haven't seen in a while",
+            description: "'One of the ways to have fun could be from going to cafe's...'"
         )
     ]
     
