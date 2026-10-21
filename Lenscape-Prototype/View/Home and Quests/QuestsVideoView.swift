@@ -20,7 +20,7 @@ struct QuestsVideoView: View {
     var body: some View {
         ScrollView{
             VStack(spacing: 24) {
-                Text("Introductory Video")
+                Text("Community Connections with Jezlyne")
                     .font(.title2)
                     .bold()
                     .padding(.top)
@@ -55,6 +55,7 @@ struct QuestsVideoView: View {
             }
             .navigationTitle("Weekly Quest Video")
             .navigationBarTitleDisplayMode(.inline)
+            // put colour in here after fixing up the QuestsView
         }
     }
 }

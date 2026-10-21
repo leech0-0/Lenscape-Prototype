@@ -22,24 +22,7 @@ struct CommunityView: View {
     var body: some View {
         NavigationStack {
             
-            // MARK: - Background Gradient
-//            ZStack(alignment: .top) {
-//                LinearGradient(
-//                    gradient: Gradient(colors: [
-//                        Color.green.opacity(0.6),
-//                        Color.green.opacity(0.3),
-//                        colorScheme == .dark
-//                        ? Color.gray.opacity(0.3)
-//                        : Color.white.opacity(0.3),
-//                        colorScheme == .dark
-//                        ? Color.gray.opacity(0.5)
-//                        : Color.white.opacity(0.5)
-//                    ]),
-//                    startPoint: .top,
-//                    endPoint: .bottom
-//                )
-//                .ignoresSafeArea()
-                
+            // MARK: - Background Gradient                
                 ZStack(alignment: .top) {
                     LinearGradient(
                         gradient: Gradient(colors: [

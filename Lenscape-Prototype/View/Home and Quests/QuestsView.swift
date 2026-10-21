@@ -136,7 +136,7 @@ struct QuestTaskRow: View {
             }
         }
         .padding(16)
-        .background(Color.white)
+        .background(Color("homePageCard"))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
