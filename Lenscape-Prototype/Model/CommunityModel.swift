@@ -5,6 +5,7 @@
 //  Created by C :) on 28/9/2026.
 //
 
+import SwiftData
 import Foundation
 
 struct QuestItem: Identifiable {
@@ -36,24 +37,26 @@ struct QuestItem: Identifiable {
     
 }
 
-struct CommunityPost: Identifiable {
-    let id: UUID
+@Model
+final class CommunityPost {
+    
+    //one community reflection per task
+    @Attribute(.unique) var taskID: UUID
+    
+   
     //Which task this reflection belongs to
-    let taskID: UUID
-    let questTitle: String
-    let userReflection: String
-    let dateSubmitted: Date
+    var questTitle: String
+    var userReflection: String
+    var dateSubmitted: Date
     var imageData: Data?
     
     init(
-        id: UUID = UUID(),
         taskID: UUID,
         questTitle: String,
         userReflection: String,
         dateSubmitted: Date = Date(),
         imageData: Data? = nil
     ){
-        self.id = id
         self.taskID = taskID
         self.questTitle = questTitle
         self.userReflection = userReflection

@@ -5,9 +5,13 @@
 
 import SwiftUI
 import PhotosUI
+import SwiftData
 
 struct QuestInputView: View {
     @Environment(\.dismiss) private var dismiss
+    
+    @Environment(\.modelContext) private var modelContext
+    
 
     let viewModel: QuestsCompletedViewModel
     let communityViewModel: CommunityViewModel
@@ -124,10 +128,15 @@ struct QuestInputView: View {
 
                 // MARK: - Submit Reflection
                 Button {
+                    let imageData = selectedImage?.jpegData(
+                        compressionQuality: 0.8
+                    )
+                    
                     viewModel.submitReflection(
                         for: task.id,
                         reflectionText: reflectionText,
-                        communityViewModel: communityViewModel
+                        imageData: imageData,
+                        modelContext: modelContext
                     )
 
                     dismiss()
@@ -144,6 +153,22 @@ struct QuestInputView: View {
                             in: Capsule()
                         )
                 }
+                
+                Button(role: .destructive) {
+                    viewModel.deleteReflection(
+                        for: task.id,
+                        modelContext: modelContext
+                    )
+
+                    reflectionText = ""
+                    selectedImage = nil
+
+                    dismiss()
+                } label: {
+                    Text("Delete Reflection")
+                        .frame(maxWidth: .infinity)
+                }
+                
                 .disabled(
                     reflectionText.trimmingCharacters(
                         in: .whitespacesAndNewlines
@@ -155,10 +180,39 @@ struct QuestInputView: View {
         .navigationTitle("Log Reflection")
         .navigationBarTitleDisplayMode(.inline)
         .scrollDismissesKeyboard(.interactively)
+        
+        
+
 
         // MARK: - Load Existing Reflection
         .onAppear {
-            reflectionText = task.userReflection
+            let taskID = task.id
+            
+            let descriptor = FetchDescriptor<CommunityPost>(
+                predicate: #Predicate {
+                    $0.taskID == taskID
+                }
+            )
+            
+            do {
+                if let existingPost = try modelContext.fetch(
+                    descriptor
+                ).first {
+                    reflectionText = existingPost.userReflection
+                    
+                    if let imageData = existingPost.imageData {
+                        selectedImage = UIImage(data: imageData)
+                    }
+                } else {
+                    reflectionText = task.userReflection
+                    
+                    if let imageData = task.imageData {
+                        selectedImage = UIImage(data: imageData)
+                    }
+                }
+            } catch {
+                print("Failed to load reflection: \(error)")
+            }
         }
 
         // MARK: - Choose Photo Source

@@ -5,6 +5,7 @@
 //  Created by C :) on 11/9/2026.
 //
 import SwiftUI
+import SwiftData
 
 //MARK: - Changing status on home page
 
@@ -41,18 +42,44 @@ final class QuestsCompletedViewModel {
     // Sub-tasks for the active quest
     var questTasks: [QuestItem] = [
         QuestItem(
-            title: "Find the Green",
-            description: "Find a piece of urban nature you normally walk past. Stop and observe it for a moment."
+            id: UUID(uuidString:
+                        "11111111-1111-1111-1111-111111111111")!,
+            title: "Jezlyne thinks that food always connects people...",
+            description: "Find a local place you would love to visit and plan to go with a friend"
         ),
         QuestItem(
-            title: "Different Generations",
-            description: "Ask someone older/younger than you how the local environment has changed during their lifetime."
+            id: UUID(uuidString:
+                        "22222222-2222-2222-2222-222222222222")!,
+            title: "'It's OK to rest...",
+            description: "Remind someone it's OK to take a break"
         ),
         QuestItem(
-            title: "Bring your own",
-            description: "Use your own bottle, cup or bag today."
+            id: UUID(uuidString:
+                        "33333333-3333-3333-3333-333333333333")!,
+            title: "'One of the ways to have fun could be from going to cafe's...",
+            description: "Plan a time to catch up with someone that you haven't seen in a while"
         )
     ]
+    
+    var completedReflectionCount: Int {
+        questTasks.filter { task in
+            task.isCompleted && !task.userReflection.trimmingCharacters(in: .whitespacesAndNewlines)
+                .isEmpty
+        }.count
+    }
+    
+    var communityBadgeImage: String {
+        switch completedReflectionCount {
+        case 0:
+            return "badgeComCon0"
+        case 1:
+            return "badgeComCon30"
+        case 2:
+            return "badgeComCon60"
+        default:
+            return "badgeComConFull"
+        }
+    }
     
     // Shared posts stored for CommunityView
     var communityPosts: [CommunityPost] = []
@@ -76,7 +103,7 @@ final class QuestsCompletedViewModel {
         for taskID: UUID,
         reflectionText: String,
         imageData: Data? = nil,
-        communityViewModel: CommunityViewModel
+        modelContext: ModelContext
     ){
         guard let index = questTasks.firstIndex(
             where: { $0.id == taskID }
@@ -98,17 +125,79 @@ final class QuestsCompletedViewModel {
         questTasks[index].reflectionDate = submissionDate
         questTasks[index].imageData = imageData
         
-        
-        // Make the reflection available to Community
-        let newPost = CommunityPost(
-            taskID: taskID,
-            questTitle: questTasks[index].title,
-            userReflection: cleanedReflection,
-            dateSubmitted: submissionDate,
-            imageData: imageData
-        )
-        
-        communityViewModel.addPost(post: newPost)
+        do {
+            // Look for an existing community post for this task
+            let descriptor = FetchDescriptor<CommunityPost>(
+                predicate: #Predicate {
+                    $0.taskID == taskID
+                }
+            )
+            
+            let existingPosts = try modelContext.fetch(descriptor)
+            
+            if let existingPost = existingPosts.first {
+                //EDIT: Update the existing post
+                existingPost.questTitle = questTasks[index].title
+                existingPost.userReflection = cleanedReflection
+                existingPost.dateSubmitted = submissionDate
+                existingPost.imageData = imageData
+            } else {
+                // NEW: Create a post if none exists
+                let newPost = CommunityPost(
+                    taskID: taskID,
+                    questTitle: questTasks[index].title,
+                    userReflection: cleanedReflection,
+                    dateSubmitted: submissionDate,
+                    imageData: imageData
+                )
+                
+                modelContext.insert(newPost)
+            }
+            
+            try modelContext.save()
+            
+        } catch {
+            print("Failed to save reflection: \(error)")
+        }
     }
+    
+    
+    func deleteReflection(
+        for taskID: UUID,
+        modelContext: ModelContext
+    ) {
+        let descriptor = FetchDescriptor<CommunityPost>(
+            predicate: #Predicate {
+                $0.taskID == taskID
+            }
+        )
+
+        do {
+            let posts = try modelContext.fetch(descriptor)
+
+            for post in posts {
+                modelContext.delete(post)
+            }
+
+            try modelContext.save()
+
+            // Reset the in-memory task as well.
+            if let index = questTasks.firstIndex(
+                where: { $0.id == taskID }
+            ) {
+                questTasks[index].userReflection = ""
+                questTasks[index].isCompleted = false
+                questTasks[index].reflectionDate = nil
+                questTasks[index].imageData = nil
+            }
+
+            print("Reflection deleted successfully.")
+
+        } catch {
+            print("Failed to delete reflection: \(error)")
+        }
+    }
+    
 }
+
 

@@ -24,7 +24,7 @@ struct QuestsView: View {
                 // MARK: - Title Card
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Environmentalism Week")
+                        Text("Community Connection Quests")
                             .font(.title2)
                             .fontWeight(.bold)
                         
@@ -43,10 +43,11 @@ struct QuestsView: View {
                     
                     Spacer()
                     
-                    Image("placeholder")
+                    Image(viewModel.communityBadgeImage)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 100)
+                        .animation(.easeInOut(duration: 0.3), value: viewModel.completedReflectionCount)
                 }
                 .padding(20)
                 .background(Color.blue.opacity(0.15))

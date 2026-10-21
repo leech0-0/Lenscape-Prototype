@@ -16,7 +16,7 @@ struct Quest: Identifiable {
     var isViewed: Bool = false
     
     
-    init(title: String = "Environmentalism week", unreadTitle: String = "A new weekly quest is out!", isViewed: Bool = false) {
+    init(title: String = "Community Connection", unreadTitle: String = "A new weekly quest is out!", isViewed: Bool = false) {
         self.title = title
         self.isViewed = isViewed
     }

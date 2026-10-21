@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CommunityView: View {
     
@@ -12,6 +13,8 @@ struct CommunityView: View {
     
     @Environment(CommunityViewModel.self)
     private var viewModel
+    
+    @Query private var communityPosts: [CommunityPost]
     
     var body: some View {
         NavigationStack {
@@ -58,8 +61,9 @@ struct CommunityView: View {
                     //MARK: - Community Posts
                     if let selectedTaskID = viewModel.selectedTaskID {
                         
-                        let posts = viewModel.posts(
-                            for: selectedTaskID)
+                        let posts = communityPosts.filter{
+                            $0.taskID == selectedTaskID
+                        }
                         
                         if posts.isEmpty {
                             

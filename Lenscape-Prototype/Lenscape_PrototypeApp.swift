@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Lenscape_PrototypeApp: App {
@@ -49,5 +50,6 @@ struct Lenscape_PrototypeApp: App {
             
             
         }
+        .modelContainer(for: CommunityPost.self)
     }
 }

@@ -11,7 +11,8 @@ import AVKit
 struct HomeView: View {
     
     @State private var viewModel = QuestsViewModel()
-    @State private var completedViewModel = QuestsCompletedViewModel()
+    
+    @Environment(QuestsCompletedViewModel.self) private var completedViewModel
     
     @Environment(\.colorScheme) private var colorScheme
     
@@ -88,11 +89,13 @@ struct HomeView: View {
                                         .multilineTextAlignment(.center)
                                     
                                     HStack {
-                                        Image("badgeComCon0")
+                                        Image(completedViewModel.communityBadgeImage)
                                             .resizable()
                                             .scaledToFit()
                                             .frame(maxWidth: 130)
                                             .frame(height: 120)
+                                            .animation(.easeInOut(duration: 0.3),
+                                                       value: completedViewModel.completedReflectionCount)
                                         
                                         VStack{
                                             
