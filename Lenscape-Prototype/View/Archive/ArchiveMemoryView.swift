@@ -7,6 +7,9 @@
 import SwiftUI
 
 struct ArchiveMemoryView: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         Text("Archive")
     }

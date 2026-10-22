@@ -28,6 +28,7 @@ final class ArchiveViewModel {
                         day: 29
                     )
                 )!,
+                imageName: "badgeRegenFull",
                 tasks: [
                     // Task 1
                     QuestItem(
@@ -36,7 +37,7 @@ final class ArchiveViewModel {
                         isCompleted: true,
                         userReflection: "TESTER REFLECTION - Quest 1"
                     ),
-
+                    
                     // Task 2
                     QuestItem(
                         title: "'The beauty of the game or the fun comes from different perspectives that are coming together'",
@@ -44,7 +45,7 @@ final class ArchiveViewModel {
                         isCompleted: true,
                         userReflection: "TESTER REFLECTION - Quest 2"
                     ),
-
+                    
                     // Task 3
                     QuestItem(
                         title: "'What would I do if I have given that power or responsibility to bring the change?'",
@@ -55,9 +56,9 @@ final class ArchiveViewModel {
                 ]
             )
         )
-
+        
         // MARK: - Preloaded Archive: Weekly Quest 2
-
+        
         archivedWeeks.append(
             ArchivedWeek(
                 title: "Urban and Public Spaces",
@@ -68,6 +69,7 @@ final class ArchiveViewModel {
                         day: 2
                     )
                 )!,
+                imageName: "badgeUrbanFull",
                 tasks: [
                     // Task 1
                     QuestItem(
@@ -76,7 +78,7 @@ final class ArchiveViewModel {
                         isCompleted: true,
                         userReflection: "TESTER REFLECTION - Quest 1"
                     ),
-
+                    
                     // Task 2
                     QuestItem(
                         title: "Share a new place you've discovered with someone",
@@ -84,7 +86,7 @@ final class ArchiveViewModel {
                         isCompleted: true,
                         userReflection: "TESTER REFLECTION - Quest 2"
                     ),
-
+                    
                     // Task 3
                     QuestItem(
                         title: "Visit a local library, park or market with someone",
@@ -97,20 +99,19 @@ final class ArchiveViewModel {
         )
     }
     
-    //MARK: - Weekly Quest Archive
+    
+    // MARK: - Weekly Quest Archive
     
     func weeklyQuests(from questsViewModel: QuestsCompletedViewModel) -> [ArchivedWeek] {
         let currentTitle = questsViewModel.currentQuest.title
         
         let currentMemories = questsViewModel.questTasks.filter {
-            $0.isCompleted && !$0.userReflection
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                .isEmpty
+            $0.isCompleted &&
+            !$0.userReflection.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
         
         var weeks = archivedWeeks
         
-        //include completed reflections from the current week until that week has been archived
         let currentWeekIsArchived = archivedWeeks.contains {
             $0.title == currentTitle
         }
@@ -119,39 +120,42 @@ final class ArchiveViewModel {
             weeks.append(
                 ArchivedWeek(
                     title: currentTitle,
-                    date: currentMemories.compactMap {$0.reflectionDate}.max() ?? Date(),
-                    tasks: questsViewModel.questTasks
+                    date: currentMemories.compactMap { $0.reflectionDate }.max() ?? Date(),
+                    imageName: badgeImageName(for: currentTitle),
+                    tasks: currentMemories
                 )
             )
         }
         
-        return weeks.sorted {$0.date > $1.date }
+        return weeks.sorted { $0.date > $1.date }
     }
     
     // MARK: - Archive a finished week
     
-    func archiveCurrentWeek(from questsViewModel: QuestsCompletedViewModel, date: Date = Date()) {
+    func archiveCurrentWeek(
+        from questsViewModel: QuestsCompletedViewModel,
+        date: Date = Date()
+    ) {
         let title = questsViewModel.currentQuest.title
         
-        // prevent the same week's title from being archived twice
-        guard !archivedWeeks.contains(where: {$0.title == title })
-                else {
+        // Prevent the same week's title from being archived twice.
+        guard !archivedWeeks.contains(where: { $0.title == title }) else {
             return
         }
         
         let completedTasks = questsViewModel.questTasks.filter {
-            $0.isCompleted && !$0.userReflection
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                .isEmpty
+            $0.isCompleted &&
+            !$0.userReflection.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
         
         guard !completedTasks.isEmpty else {
             return
         }
         
-        let archivedWeek = ArchivedWeek (
+        let archivedWeek = ArchivedWeek(
             title: title,
             date: date,
+            imageName: badgeImageName(for: title),
             tasks: completedTasks
         )
         
@@ -159,10 +163,24 @@ final class ArchiveViewModel {
         archivedWeeks.sort { $0.date > $1.date }
     }
     
+    // MARK: - Badge Images
+    
+    private func badgeImageName(for title: String) -> String {
+        switch title {
+        case "Regeneration":
+            return "badgeRegenFull"
+            
+        case "Urban and Public Spaces":
+            return "badgeUrbanFull"
+            
+        default:
+            return "badgeRegen0"
+        }
+    }
+    
     // MARK: - Memories
+    
     func memoryCount(in week: ArchivedWeek) -> Int {
         week.memories.count
     }
-    
-    
 }

@@ -12,6 +12,8 @@ struct ArchiveWeeklyQuestsView: View {
 
     @Environment(ArchiveViewModel.self) private var archiveViewModel
     @Environment(QuestsCompletedViewModel.self) private var questsViewModel
+    
+    @Environment(\.colorScheme) private var colorScheme
 
     private let columns = [
         GridItem(.flexible(), spacing: 12),
@@ -67,15 +69,15 @@ struct ArchiveWeeklyQuestsView: View {
             }
             .padding(18)
         }
-        .background(Color.purple.opacity(0.07))
-        .navigationTitle("Weekly Archive")
-        .navigationBarTitleDisplayMode(.inline)
+        .background(colorScheme == .dark ? Color.gray.opacity(0.5) : Color("archBackground").opacity(0.2))
     }
 }
 
 // MARK: - Weekly archive card
 
 private struct WeeklyArchiveCard: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
 
     let week: ArchivedWeek
 
@@ -95,15 +97,27 @@ private struct WeeklyArchiveCard: View {
 
             ZStack {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.14))
+                    .fill(Color.purple.opacity(0.14))
+                
+                Image(colorScheme == .dark ? "videoShapeDM" : "videoShapeLM")
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .offset(y: -60)
 
                 Image(systemName: "play.circle.fill")
                     .font(.system(size: 34))
-                    .foregroundStyle(.gray.opacity(0.6))
+                    .foregroundStyle(.purple.opacity(0.5))
+                
+                Text("Click here to watch the weekly video!")
+                    .font(.caption)
+                    .offset(y: 60)
+                    .padding()
             }
-            .frame(height: 76)
+            .frame(height: 250)
             .padding(.horizontal, 6)
+            .padding(.bottom, 20)
 
+            
             Text(memoryCount == 1 ? "1 Memory" : "\(memoryCount) Memories")
                 .font(.caption)
                 .foregroundStyle(.white)
@@ -111,21 +125,16 @@ private struct WeeklyArchiveCard: View {
                 .padding(.vertical, 7)
                 .background(Color.purple.opacity(0.75), in: Capsule())
 
-            Spacer(minLength: 4)
+            Spacer(minLength: 1)
 
-            Image(systemName: "hexagon")
-                .font(.system(size: 46))
-                .foregroundStyle(.orange)
-                .overlay {
-                    Image(systemName: "leaf.fill")
-                        .font(.system(size: 20))
-                        .foregroundStyle(.green)
-                }
-                .padding(.bottom, 4)
+            Image(week.imageName)
+                .resizable()
+                .frame(width: 100, height: 100)
+                .padding(.bottom, 10)
         }
         .padding(10)
         .frame(maxWidth: .infinity)
-        .frame(height: 255)
+        .frame(height: 550)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 18))
         .overlay {

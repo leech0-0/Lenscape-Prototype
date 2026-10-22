@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct ArchiveFestivalsView: View {
+    
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         ScrollView {

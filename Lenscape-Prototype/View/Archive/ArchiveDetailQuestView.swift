@@ -12,6 +12,8 @@ import UIKit
 struct ArchiveDetailQuestsView: View {
 
     let week: ArchivedWeek
+    
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         ScrollView {
@@ -109,7 +111,7 @@ struct ArchiveDetailQuestsView: View {
 
                         }
                         .padding(16)
-                        .background(Color.white)
+                        .background(Color("homePageCard"))
                         .clipShape(RoundedRectangle(cornerRadius: 18))
                         .overlay {
                             RoundedRectangle(cornerRadius: 18)
@@ -135,6 +137,7 @@ struct ArchiveDetailQuestsView: View {
             week: ArchivedWeek(
                 title: "Environmentalism Week",
                 date: .now,
+                imageName: "badgeRegenFull",
                 tasks: [
                     QuestItem(
                         title: "Find the Green",

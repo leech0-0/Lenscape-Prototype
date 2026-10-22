@@ -11,17 +11,20 @@ struct ArchivedWeek: Identifiable {
     let id: UUID
     let title: String
     let date: Date
+    let imageName: String
     let tasks: [QuestItem]
     
     init(
         id: UUID = UUID(),
         title: String,
         date: Date,
+        imageName: String,
         tasks: [QuestItem]
     ){
         self.id = id
         self.title = title
         self.date = date
+        self.imageName = imageName
         self.tasks = tasks
         
     }
