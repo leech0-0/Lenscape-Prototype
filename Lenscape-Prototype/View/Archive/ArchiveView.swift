@@ -9,58 +9,81 @@
 import SwiftUI
 
 struct ArchiveView: View {
-
+    
     @Environment(ArchiveViewModel.self) private var archiveViewModel
-
+    
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-
-                    // Header
-                    HStack(alignment: .center) {
-                        Text("Archive")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-
+            
+            // MARK: - Background Gradient
+            ZStack(alignment: .top) {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color("archBackground").opacity(0.5),
+                        Color("archBackground").opacity(0.6),
+                        colorScheme == .dark
+                        ? Color.gray.opacity(0.3)
+                        : Color.white.opacity(0.3),
+                        colorScheme == .dark
+                        ? Color.gray.opacity(0.5)
+                        : Color.white.opacity(0.5)
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+                
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        
+                        // Header
+                        HStack(alignment: .center) {
+                            Text("Archive")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                            
+                            Spacer(minLength: 10)
+                            
+                            Image(colorScheme == .dark ? "archiveShapeDM" : "archiveShapeLM")
+                                .resizable()
+                                .frame(width: 125, height: 125)
+                        }
+                        
+                        // Weekly quests category
+                        NavigationLink {
+                            ArchiveWeeklyQuestsView()
+                        } label: {
+                            ArchiveCategoryCard(
+                                title: "Weekly Quests",
+                                subtitle: "Revisit your past quests and memories",
+                                imageName: colorScheme == .dark ? "questArchiveDM" : "questArchiveLM",
+                                accent: Color.purple.opacity(0.22)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        
+                        // Festival category
+                        NavigationLink {
+                            ArchiveFestivalsView()
+                        } label: {
+                            ArchiveCategoryCard(
+                                title: "Festival Archive",
+                                subtitle: "Look back on your festival experiences",
+                                imageName: colorScheme == .dark ? "festivalArchiveDM" : "festivalArchiveLM",
+                                accent: Color.orange.opacity(0.35)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Spacer(minLength: 16)
                     }
-
-                    Rectangle()
-                        .fill(Color.primary.opacity(0.7))
-                        .frame(height: 1)
-
-                    // Weekly quests category
-                    NavigationLink {
-                        ArchiveWeeklyQuestsView()
-                    } label: {
-                        ArchiveCategoryCard(
-                            title: "Weekly Quests",
-                            subtitle: "Revisit your past quests and memories",
-                            symbol: "leaf.fill",
-                            accent: Color.purple.opacity(0.22)
-                        )
-                    }
-                    .buttonStyle(.plain)
-
-                    // Festival category
-                    NavigationLink {
-                        ArchiveFestivalsView()
-                    } label: {
-                        ArchiveCategoryCard(
-                            title: "Festival Archive",
-                            subtitle: "Look back on your festival experiences",
-                            symbol: "ticket.fill",
-                            accent: Color.orange.opacity(0.35)
-                        )
-                    }
-                    .buttonStyle(.plain)
-
-                    Spacer(minLength: 16)
+                    .padding(20)
                 }
-                .padding(20)
+                .toolbar(.hidden, for: .navigationBar)
             }
-            .background(Color.purple.opacity(0.07))
-            .toolbar(.hidden, for: .navigationBar)
         }
     }
 }
@@ -71,7 +94,7 @@ private struct ArchiveCategoryCard: View {
 
     let title: String
     let subtitle: String
-    let symbol: String
+    let imageName: String
     let accent: Color
 
     var body: some View {
@@ -81,11 +104,12 @@ private struct ArchiveCategoryCard: View {
                 RoundedRectangle(cornerRadius: 16)
                     .fill(accent)
 
-                Image(systemName: symbol)
-                    .font(.system(size: 38, weight: .medium))
-                    .foregroundStyle(.primary)
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .padding()
             }
-            .frame(width: 100)
+            .frame(width: 125)
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(title)
@@ -104,11 +128,12 @@ private struct ArchiveCategoryCard: View {
                         .font(.headline)
                         .foregroundStyle(.purple)
                 }
+                
             }
             .padding(16)
         }
-        .frame(minHeight: 136)
-        .background(Color.white)
+        .frame(minHeight: 300)
+        .background(Color("homePageCard"))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay {
             RoundedRectangle(cornerRadius: 16)
