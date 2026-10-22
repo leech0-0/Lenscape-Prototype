@@ -19,6 +19,9 @@ struct ArchiveFestivalsView: View {
                 Text("Festival Archive")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                
+                Text("Page under construction, sorry!")
+                    .font(.title3)
 
                 Rectangle()
                     .fill(Color.primary.opacity(0.7))

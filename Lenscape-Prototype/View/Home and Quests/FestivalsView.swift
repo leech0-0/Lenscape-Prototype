@@ -19,7 +19,7 @@ struct FestivalsView: View {
                     
                     Divider()
                     
-                    Text("Watch last year's recap")
+                    Text("Page under construction, sorry!")
                         .font(.title3)
                 }
             }

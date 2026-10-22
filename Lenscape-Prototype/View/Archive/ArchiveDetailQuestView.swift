@@ -28,6 +28,9 @@ struct ArchiveDetailQuestsView: View {
                     Text("Your memories")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                    
+                    Text("Page under construction, sorry!")
+                        .font(.title3)
                 }
 
                 // Individual memories
