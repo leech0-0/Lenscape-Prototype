@@ -11,8 +11,6 @@ struct ProfileView: View {
     var body: some View {
         Text("Profile / Settings")
         
-        Text("Page under construction, sorry!")
-            .font(.title3)
     }
 }
 
