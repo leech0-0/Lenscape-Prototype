@@ -242,4 +242,6 @@ struct HomeView: View {
 // MARK: - Preview
 #Preview {
     HomeView()
+        .environment(QuestsCompletedViewModel())
+        .environment(CommunityViewModel())
 }

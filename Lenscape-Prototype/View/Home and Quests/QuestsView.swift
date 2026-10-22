@@ -23,8 +23,8 @@ struct QuestsView: View {
             ZStack(alignment: .top) {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color.blue.opacity(0.8),
                         Color.blue.opacity(0.5),
+                        Color.blue.opacity(0.3),
                         colorScheme == .dark
                         ? Color.gray.opacity(0.3)
                         : Color.white.opacity(0.3),
@@ -57,7 +57,7 @@ struct QuestsView: View {
                                     }
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(.black)
                                 }
                             }
                             
@@ -68,10 +68,22 @@ struct QuestsView: View {
                                 .scaledToFit()
                                 .frame(width: 100, height: 100)
                                 .animation(.easeInOut(duration: 0.3), value: viewModel.completedReflectionCount)
+                            
                         }
                         .padding(20)
-                        .background(Color.blue.opacity(0.15))
-                        .cornerRadius(20)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color("homePageCard"))
+                                .shadow(
+                                    color: .blue.opacity(0.8),
+                                    radius: 0,
+                                    x: 7,
+                                    y: 7
+                                )
+                        )
+                        .contentShape(
+                            RoundedRectangle(cornerRadius: 20)
+                        )
                         .padding(.horizontal)
                         
                         // MARK: - Quests Section
@@ -156,13 +168,25 @@ struct QuestTaskRow: View {
             }
         }
         .padding(16)
-        .background(Color("homePageCard"))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color("homePageCard"))
+                .shadow(
+                    color: .blue.opacity(0.6),
+                    radius: 0,
+                    x: 7,
+                    y: 7
+                )
+        )
+        .contentShape(
+            RoundedRectangle(cornerRadius: 16)
+        )
     }
 }
 
 #Preview {
  QuestsView()
+        .environment(QuestsCompletedViewModel())
+        .environment(CommunityViewModel())
 }
 
