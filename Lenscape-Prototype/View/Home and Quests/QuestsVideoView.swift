@@ -22,7 +22,7 @@ struct QuestsVideoView: View {
     var body: some View {
         ScrollView{
             VStack(spacing: 24) {
-                Text("Community Connections with Jezlyne")
+                Text("Taste of Community with Jezlyne")
                     .font(.title2)
                     .bold()
                     .padding(.top)
