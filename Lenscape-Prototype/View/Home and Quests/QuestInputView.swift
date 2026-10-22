@@ -12,6 +12,8 @@ struct QuestInputView: View {
     
     @Environment(\.modelContext) private var modelContext
     
+    @Environment(\.colorScheme) private var colorScheme
+    
 
     let viewModel: QuestsCompletedViewModel
     let communityViewModel: CommunityViewModel
@@ -45,9 +47,9 @@ struct QuestInputView: View {
 
                         Spacer()
 
-                        Image("placeholder")
+                        Image(colorScheme == .dark ? "celebrateShapeDM" : "celebrateShapeLM")
                             .resizable()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 110, height: 110)
                     }
                 }
 
@@ -177,8 +179,6 @@ struct QuestInputView: View {
             }
             .padding()
         }
-        .navigationTitle("Log Reflection")
-        .navigationBarTitleDisplayMode(.inline)
         .scrollDismissesKeyboard(.interactively)
         
         
@@ -351,4 +351,5 @@ struct QuestInputView: View {
                 )
             )
         }
+        .modelContainer(for: CommunityPost.self)
     }
