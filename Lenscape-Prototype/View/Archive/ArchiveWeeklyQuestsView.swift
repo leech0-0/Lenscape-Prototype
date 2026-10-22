@@ -95,27 +95,49 @@ private struct WeeklyArchiveCard: View {
                 .lineLimit(3)
                 .frame(maxWidth: .infinity, minHeight: 54)
 
-            ZStack {
-                Rectangle()
-                    .fill(Color.purple.opacity(0.14))
-                
-                Image(colorScheme == .dark ? "videoShapeDM" : "videoShapeLM")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .offset(y: -60)
+            NavigationLink {
+                Group {
+                    switch week.title {
+                    case "Urban and Public Spaces":
+                        ArchVideoUrbanView(viewModel: QuestsViewModel())
 
-                Image(systemName: "play.circle.fill")
-                    .font(.system(size: 34))
-                    .foregroundStyle(.purple.opacity(0.5))
-                
-                Text("Click here to watch the weekly video!")
-                    .font(.caption)
-                    .offset(y: 60)
-                    .padding()
+                    case "Regeneration":
+                        ArchVideoRegenView(viewModel: QuestsViewModel())
+
+                    default:
+                        ContentUnavailableView(
+                            "Video unavailable",
+                            systemImage: "video.slash",
+                            description: Text("There is no video available for this quest yet.")
+                        )
+                    }
+                }
+            } label: {
+                ZStack {
+                    Rectangle()
+                        .fill(Color.purple.opacity(0.14))
+
+                    Image(colorScheme == .dark ? "videoShapeDM" : "videoShapeLM")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .offset(y: -60)
+
+                    Image(systemName: "play.circle.fill")
+                        .font(.system(size: 34))
+                        .foregroundStyle(.purple.opacity(0.5))
+
+                    Text("Click here to watch the weekly video!")
+                        .font(.caption)
+                        .offset(y: 60)
+                        .padding()
+                }
+                .frame(height: 250)
+                .padding(.horizontal, 6)
+                .padding(.bottom, 20)
+                .contentShape(Rectangle())
             }
-            .frame(height: 250)
-            .padding(.horizontal, 6)
-            .padding(.bottom, 20)
+            .buttonStyle(.plain)
 
             
             Text(memoryCount == 1 ? "1 Memory" : "\(memoryCount) Memories")
