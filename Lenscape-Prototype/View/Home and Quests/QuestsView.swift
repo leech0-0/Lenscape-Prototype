@@ -57,7 +57,7 @@ struct QuestsView: View {
                                     }
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
                                 }
                             }
                             
@@ -73,9 +73,9 @@ struct QuestsView: View {
                         .padding(20)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
-                                .fill(Color("homePageCard"))
+                                .fill(Color("questTitle"))
                                 .shadow(
-                                    color: .blue.opacity(0.8),
+                                    color: .black.opacity(0.4),
                                     radius: 0,
                                     x: 7,
                                     y: 7
