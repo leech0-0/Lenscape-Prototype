@@ -27,7 +27,7 @@ struct QuestsVideoView: View {
                     .bold()
                     .padding(.top)
                 
-//     see if they want this           Text("This week's video focuses on ... ")
+                Text("Tap below to start the video")
                 
                 // Embedded Video Player
                 VideoPlayer(player: player)
