@@ -17,6 +17,8 @@ struct QuestsView: View {
     
     @State private var selectedTaskForInput: QuestItem? = nil
     
+    @State private var showQuestDetails = false
+    
     var body: some View {
         NavigationStack{
             // MARK: - Background Gradient
@@ -49,7 +51,7 @@ struct QuestsView: View {
                                     .fontWeight(.bold)
                                 
                                 Button {
-                                    // Expand/details logic
+                                    showQuestDetails = true
                                 } label: {
                                     HStack(spacing: 4) {
                                         Text("See details")
@@ -112,6 +114,36 @@ struct QuestsView: View {
                         viewModel: viewModel,
                         communityViewModel: communityViewModel,
                         task: task)
+                }
+                .sheet(isPresented: $showQuestDetails) {
+                    NavigationStack {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("Community Connection Quests")
+                                .font(.title2)
+                                .fontWeight(.bold)
+
+                            Text("Building connections doesn't have to be complicated. A shared meal, a simple conversation, or spending time together can bring people closer. This week, explore the places around you, share stories, and discover how small moments of kindness can create a stronger sense of belonging.")
+                                .font(.body)
+                            
+                            Image(colorScheme == .dark ? "pointingDM" : "pointingLM")
+                                .resizable
+
+                            Spacer()
+                        }
+                        .padding(24)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .navigationTitle("Quest Details")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button("Done") {
+                                    showQuestDetails = false
+                                }
+                            }
+                        }
+                    }
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
                 }
                 .onAppear {
                     viewModel.markVideoAsWatched()
