@@ -8,12 +8,31 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    
     var body: some View {
-        VStack{
-            Text("Profile / Settings")
+        NavigationStack {
             
-            Text("Page under Construction, sorry!")
+            VStack{
+                Text("Page under construction, sorry!")
+                
+                Form {
+                    Section("Appearance") {
+                        Toggle(isOn: $isDarkMode) {
+                            Label(
+                                isDarkMode ? "Dark Mode" : "Light Mode",
+                                systemImage: isDarkMode
+                                ? "moon.fill"
+                                : "sun.max.fill"
+                            )
+                        }
+                    }
+                }
+                .navigationTitle("Profile")
+            }
         }
+        
+        
     }
 }
 

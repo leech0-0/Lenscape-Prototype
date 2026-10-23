@@ -17,6 +17,8 @@ struct Lenscape_PrototypeApp: App {
     
     @State private var archiveViewModel = ArchiveViewModel()
     
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    
     var body: some Scene {
         WindowGroup {
             TabView{
@@ -47,6 +49,7 @@ struct Lenscape_PrototypeApp: App {
             .environment(questsViewModel)
             .environment(communityViewModel)
             .environment(archiveViewModel)
+            .preferredColorScheme(isDarkMode ? .dark : .light)
             
             
         }
