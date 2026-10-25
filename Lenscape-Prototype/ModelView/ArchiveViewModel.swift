@@ -16,6 +16,33 @@ final class ArchiveViewModel {
     
     var archivedWeeks: [ArchivedWeek] = []
     
+    // MARK: - Festival Archive
+
+    var festivalMemories: [QuestItem] = [
+        QuestItem(
+            title: "Discover...",
+            description: "Walk past at least 3 festival activities",
+            isCompleted: true,
+            userReflection: "I walked around the main street, there were a numerous amount of activities! I loved the free ice cream",
+            imageName: "festivalExploration"
+        ),
+        QuestItem(
+            title: "Meet the maker...",
+            description: "After trying a student project, ask the creator/s: 'What do you want people to take away from this game?'",
+            isCompleted: true,
+            userReflection: "They answered building civic muscles! I loved all projects, they were really meaningful",
+            imageName: "festivalConnection"
+        ),
+        QuestItem(
+            title: "Keep it going...",
+            description: "Choose one idea, activity or interaction from today's festival that you think should continue beyond the festival",
+            isCompleted: true,
+            userReflection: "I think all of the projects were really meaningful. I would love to see how their projects change after today",
+            imageName: "festivalAction"
+        )
+    ]
+
+    
     init() { // MARK: - Preloaded Archive: Weekly Quest 1
         
         archivedWeeks.append(

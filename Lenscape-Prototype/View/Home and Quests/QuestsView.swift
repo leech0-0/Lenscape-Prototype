@@ -50,17 +50,6 @@ struct QuestsView: View {
                                 Text("Community Connection Quests")
                                     .font(.title2)
                                     .fontWeight(.bold)
-                                
-                                Button {
-                                    showQuestDetails = true
-                                } label: {
-                                    HStack(spacing: 4) {
-                                        Text("See details")
-                                        Image(systemName: "chevron.right")
-                                    }
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
                                 }
                             }
                             
@@ -149,7 +138,6 @@ struct QuestsView: View {
             }
         }
     }
-}
 
 // MARK: - Subview for Individual Quest Card
 struct QuestTaskRow: View {

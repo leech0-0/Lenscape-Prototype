@@ -6,60 +6,146 @@
 //
 
 
+
 import SwiftUI
+import UIKit
 
 struct ArchiveFestivalsView: View {
-    
-    @Environment(\.colorScheme) private var colorScheme
+
+    @Environment(ArchiveViewModel.self) private var archiveViewModel
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 22) {
 
-                Text("Festival Archive")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Text("Page under construction, sorry!")
-                    .font(.title3)
+                // Festival archive heading
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Festival Archive")
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                    Text("Your festival memories")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
 
                 Rectangle()
                     .fill(Color.primary.opacity(0.7))
                     .frame(height: 1)
 
-                Text(Date.now.formatted(.dateTime.month(.wide).year()))
-                    .font(.headline)
+                // Festival memories
+                if archiveViewModel.festivalMemories.isEmpty {
 
-                VStack(spacing: 14) {
-                    Image(systemName: "play.rectangle.fill")
-                        .font(.system(size: 44))
-                        .foregroundStyle(.gray.opacity(0.65))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 100)
-                        .background(Color.gray.opacity(0.12))
+                    ContentUnavailableView(
+                        "No festival memories",
+                        systemImage: "book.closed",
+                        description: Text(
+                            "Your saved festival reflections will appear here."
+                        )
+                    )
 
-                    Text("Festival memories")
-                        .font(.headline)
+                } else {
 
-                    Text("Your saved festival experiences will appear here.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+                    ForEach(archiveViewModel.festivalMemories) { memory in
 
-                    Text("Memory")
-                        .font(.caption)
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 7)
-                        .background(Color.purple.opacity(0.75), in: Capsule())
-                }
-                .padding(16)
-                .frame(maxWidth: .infinity)
-                .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 18))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 18)
-                        .stroke(Color.purple.opacity(0.25), lineWidth: 1)
+                        VStack(alignment: .leading, spacing: 12) {
+
+                            // Memory date
+                            Text(
+                                (memory.reflectionDate ?? Date.now)
+                                    .formatted(
+                                        .dateTime
+                                            .day()
+                                            .month(.abbreviated)
+                                            .year()
+                                    )
+                                    .uppercased()
+                            )
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.primary)
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .trailing
+                            )
+
+                            // Memory image
+                            if let imageData = memory.imageData,
+                               let image = UIImage(data: imageData) {
+
+                                // User-uploaded photo
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 210)
+                                    .clipped()
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 14)
+                                    )
+
+                            } else if !memory.imageName.isEmpty {
+
+                                // Image from Assets.xcassets
+                                Image(memory.imageName)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 210)
+                                    .clipped()
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 14)
+                                    )
+
+                            } else {
+
+                                // Default image
+                                Image("myAction")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 210)
+                                    .clipped()
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 14)
+                                    )
+                            }
+
+                            // Memory heading
+                            HStack {
+                                Text(memory.title)
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+
+                                Spacer()
+
+                                Image(systemName: "book.closed.fill")
+                                    .font(.title3)
+                                    .foregroundStyle(.orange)
+                            }
+
+                            // Reflection content
+                            Text(memory.userReflection)
+                                .font(.subheadline)
+                                .foregroundStyle(.primary)
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
+                        }
+                        .padding(16)
+                        .background(Color("homePageCard"))
+                        .clipShape(
+                            RoundedRectangle(cornerRadius: 18)
+                        )
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 18)
+                                .stroke(
+                                    Color.purple.opacity(0.18),
+                                    lineWidth: 1
+                                )
+                        }
+                    }
                 }
             }
             .padding(18)
@@ -73,5 +159,6 @@ struct ArchiveFestivalsView: View {
 #Preview {
     NavigationStack {
         ArchiveFestivalsView()
+            .environment(ArchiveViewModel())
     }
 }

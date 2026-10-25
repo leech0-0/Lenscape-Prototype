@@ -154,7 +154,7 @@ struct HomeView: View {
                                 .padding(.horizontal, 30)
                             
                             NavigationLink {
-                                FestivalsView()
+                                ArchiveFestivalsView()
                             } label: {
                                 VStack(spacing: 12) {
                                     Text("City North Shared Futures Festival")
