@@ -128,20 +128,30 @@ struct QuestInputView: View {
                     }
                 }
 
+                
                 // MARK: - Submit Reflection
                 Button {
+                    let trimmedReflection = reflectionText.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    )
+
+                    guard !trimmedReflection.isEmpty else {
+                        return
+                    }
+
                     let imageData = selectedImage?.jpegData(
                         compressionQuality: 0.8
                     )
-                    
+
                     viewModel.submitReflection(
                         for: task.id,
-                        reflectionText: reflectionText,
+                        reflectionText: trimmedReflection,
                         imageData: imageData,
                         modelContext: modelContext
                     )
 
                     dismiss()
+
                 } label: {
                     Text("Submit Reflection")
                         .font(.headline)
@@ -155,6 +165,7 @@ struct QuestInputView: View {
                             in: Capsule()
                         )
                 }
+
                 
                 Button(role: .destructive) {
                     viewModel.deleteReflection(

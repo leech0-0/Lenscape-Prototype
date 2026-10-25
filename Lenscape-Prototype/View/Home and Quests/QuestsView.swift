@@ -21,6 +21,7 @@ struct QuestsView: View {
     
     var body: some View {
         NavigationStack{
+            
             // MARK: - Background Gradient
             ZStack(alignment: .top) {
                 LinearGradient(
@@ -124,9 +125,6 @@ struct QuestsView: View {
 
                             Text("Building connections doesn't have to be complicated. A shared meal, a simple conversation, or spending time together can bring people closer. This week, explore the places around you, share stories, and discover how small moments of kindness can create a stronger sense of belonging.")
                                 .font(.body)
-                            
-                            Image(colorScheme == .dark ? "pointingDM" : "pointingLM")
-                                .resizable
 
                             Spacer()
                         }

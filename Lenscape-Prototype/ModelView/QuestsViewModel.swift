@@ -102,7 +102,7 @@ final class QuestsCompletedViewModel {
     func submitReflection(
         for taskID: UUID,
         reflectionText: String,
-        imageData: Data? = nil,
+        imageData: Data?,
         modelContext: ModelContext
     ){
         guard let index = questTasks.firstIndex(

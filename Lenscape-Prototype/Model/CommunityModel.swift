@@ -64,3 +64,11 @@ final class CommunityPost {
         self.imageData = imageData
     }
 }
+
+// MARK: - Example Community Reflection
+
+struct CommunityExampleReflection: Identifiable {
+    let id = UUID()
+    let text: String
+    let imageName: String
+}

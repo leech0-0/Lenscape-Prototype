@@ -22,23 +22,23 @@ struct CommunityView: View {
     var body: some View {
         NavigationStack {
             
-            // MARK: - Background Gradient                
-                ZStack(alignment: .top) {
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color("commBackground").opacity(0.8),
-                            Color("commBackground").opacity(0.5),
-                            colorScheme == .dark
-                            ? Color.gray.opacity(0.3)
-                            : Color.white.opacity(0.3),
-                            colorScheme == .dark
-                            ? Color.gray.opacity(0.5)
-                            : Color.white.opacity(0.5)
-                        ]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .ignoresSafeArea()
+            // MARK: - Background Gradient
+            ZStack(alignment: .top) {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color("commBackground").opacity(0.8),
+                        Color("commBackground").opacity(0.5),
+                        colorScheme == .dark
+                        ? Color.green.opacity(0.3)
+                        : Color.white.opacity(0.3),
+                        colorScheme == .dark
+                        ? Color.green.opacity(0.1)
+                        : Color.white.opacity(0.5)
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
                 
                 ZStack{
                     Image(colorScheme == .dark ? "communityDM" : "communityLM")
@@ -51,9 +51,9 @@ struct CommunityView: View {
                     
                     VStack(alignment: .leading, spacing: 20){
                         //MARK: - Header
-                            Text("Community")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
+                        Text("Community")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
                         
                         Spacer()
                         
@@ -89,51 +89,88 @@ struct CommunityView: View {
                         }
                         
                         //MARK: - Community Posts
-                        if let selectedTaskID = viewModel.selectedTaskID {
+                        
+                        // MARK: - Community Posts
+                        if let selectedTaskID = viewModel.selectedTaskID,
+                           let questIndex = questsViewModel.questTasks.firstIndex(
+                            where: { $0.id == selectedTaskID }
+                           ) {
                             
-                            let posts = communityPosts.filter{
+                            let posts = communityPosts.filter {
                                 $0.taskID == selectedTaskID
                             }
                             
                             if posts.isEmpty {
                                 
+                                // No user reflection submitted for this quest yet
                                 CommunityLockedView()
                                 
                             } else {
+                                
                                 VStack(spacing: 14) {
                                     
+                                    // MARK: - User's Submitted Reflection
                                     ForEach(posts) { post in
-                                        
                                         CommunityPostCard(post: post)
+                                    }
+                                    
+                                    // MARK: - Four Example Reflections
+                                    ForEach(viewModel.examples(for: questIndex)) { example in
+                                        CommunityExamplePostCard(reflection: example)
                                     }
                                 }
                             }
-                        } else {
                             
+                        } else {
                             CommunityLockedView()
                         }
-                    }
-                    .padding()
-                }
-                .background(
-                    Color.green.opacity(0.08)
-                        .ignoresSafeArea()
-                )
-                
-                .navigationBarTitleDisplayMode(.inline)
-                
-                .onAppear {
-                    
-                    //select first quest automatically
-                    if viewModel.selectedTaskID == nil,
-                       let firstTask = questsViewModel.questTasks.first {
-                        
-                        viewModel.selectedTaskID = firstTask.id
                     }
                 }
             }
         }
     }
+}
+
+
+// MARK: - Example Community Post Card
+struct CommunityExamplePostCard: View {
+    let reflection: CommunityExampleReflection
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+
+            // Example reflection photo
+            Image(reflection.imageName)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 110, height: 110)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 12)
+                )
+
+            // Example reflection text
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Community Reflection")
+                    .font(.headline)
+
+                Text(reflection.text)
+                    .font(.body)
+                    .fixedSize(
+                        horizontal: false,
+                        vertical: true
+                    )
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            Color("homePageCard"),
+            in: RoundedRectangle(cornerRadius: 16)
+        )
+    }
+}
+
     
     //MARK: - QuestButton trial
     struct QuestButton: View {
@@ -232,7 +269,6 @@ struct CommunityView: View {
             )
         }
     }
-}
 
 #Preview {
     CommunityView()
