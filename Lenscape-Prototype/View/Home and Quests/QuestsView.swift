@@ -41,7 +41,7 @@ struct QuestsView: View {
                 .ignoresSafeArea()
                 
                 
-            ScrollView {
+                ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         
                         
@@ -52,7 +52,7 @@ struct QuestsView: View {
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .fixedSize(horizontal: false, vertical: true)
-
+                                
                                 Button {
                                     showQuestDetails = true
                                 } label: {
@@ -65,7 +65,7 @@ struct QuestsView: View {
                                 }
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
-
+                            
                             Image(viewModel.communityBadgeImage)
                                 .resizable()
                                 .scaledToFit()
@@ -92,7 +92,7 @@ struct QuestsView: View {
                             RoundedRectangle(cornerRadius: 20)
                         )
                         .padding(.horizontal)
-
+                        
                         
                         // MARK: - Quests Section
                         Text("Quests")
@@ -127,10 +127,10 @@ struct QuestsView: View {
                             Text("Community Connection Quests")
                                 .font(.title2)
                                 .fontWeight(.bold)
-
+                            
                             Text("Building connections doesn't have to be complicated. A shared meal, a simple conversation, or spending time together can bring people closer. This week, explore the places around you, share stories, and discover how small moments of kindness can create a stronger sense of belonging.")
                                 .font(.body)
-
+                            
                             Spacer()
                         }
                         .padding(24)
@@ -154,67 +154,68 @@ struct QuestsView: View {
             }
         }
     }
-
-// MARK: - Subview for Individual Quest Card
-struct QuestTaskRow: View {
-    let task: QuestItem
-    let onTap: () -> Void
     
-    var body: some View {
-        HStack(alignment: .top, spacing: 14) {
-            
-            // Checkbox / Completion Icon
-            Button(action: onTap) {
-                Image(systemName: task.isCompleted ? "checkmark.square.fill" : "square")
-                    .resizable()
-                    .frame(width: 28, height: 28)
-                    .foregroundStyle(task.isCompleted ? .blue : .gray)
-            }
-            .buttonStyle(.plain)
-            
-            // Task Description Content
-            VStack(alignment: .leading, spacing: 6) {
-                Text(task.title)
-                    .font(.headline)
-                    .fontWeight(.bold)
+    // MARK: - Subview for Individual Quest Card
+    struct QuestTaskRow: View {
+        let task: QuestItem
+        let onTap: () -> Void
+        
+        var body: some View {
+            HStack(alignment: .top, spacing: 14) {
                 
-                if task.isCompleted {
-                    Text("Task Completed!")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                } else {
-                    Text(task.description)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            
-            Spacer()
-            
-            // Edit icon when completed
-            if task.isCompleted {
+                // Checkbox / Completion Icon
                 Button(action: onTap) {
-                    Image(systemName: "pencil.circle")
+                    Image(systemName: task.isCompleted ? "checkmark.square.fill" : "square")
                         .resizable()
-                        .frame(width: 26, height: 26)
-                        .foregroundStyle(.blue)
+                        .frame(width: 28, height: 28)
+                        .foregroundStyle(task.isCompleted ? .blue : .gray)
+                }
+                .buttonStyle(.plain)
+                
+                // Task Description Content
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(task.title)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                    
+                    if task.isCompleted {
+                        Text("Task Completed!")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text(task.description)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                
+                Spacer()
+                
+                // Edit icon when completed
+                if task.isCompleted {
+                    Button(action: onTap) {
+                        Image(systemName: "pencil.circle")
+                            .resizable()
+                            .frame(width: 26, height: 26)
+                            .foregroundStyle(.blue)
+                    }
                 }
             }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color("homePageCard"))
+                    .shadow(
+                        color: .blue.opacity(0.6),
+                        radius: 0,
+                        x: 7,
+                        y: 7
+                    )
+            )
+            .contentShape(
+                RoundedRectangle(cornerRadius: 16)
+            )
         }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color("homePageCard"))
-                .shadow(
-                    color: .blue.opacity(0.6),
-                    radius: 0,
-                    x: 7,
-                    y: 7
-                )
-        )
-        .contentShape(
-            RoundedRectangle(cornerRadius: 16)
-        )
     }
 }
 
