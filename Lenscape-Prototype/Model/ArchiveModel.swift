@@ -11,7 +11,7 @@ struct ArchivedWeek: Identifiable {
     let id: UUID
     let title: String
     let date: Date
-    let imageName: String
+    var imageName: String? = nil
     let tasks: [QuestItem]
     
     init(

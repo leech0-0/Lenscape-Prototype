@@ -29,8 +29,6 @@ struct ArchiveDetailQuestsView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     
-                    Text("Page under construction, sorry!")
-                        .font(.title3)
                 }
 
                 // Individual memories
@@ -65,10 +63,12 @@ struct ArchiveDetailQuestsView: View {
                                 alignment: .trailing
                             )
 
+                            
                             // Photo attached to reflection
                             if let imageData = memory.imageData,
                                let image = UIImage(data: imageData) {
 
+                                // User-uploaded photo
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFill()
@@ -79,16 +79,34 @@ struct ArchiveDetailQuestsView: View {
                                         RoundedRectangle(cornerRadius: 14)
                                     )
 
+                            } else if !memory.imageName.isEmpty {
+                                let imageName = memory.imageName
+
+                                // Image from Assets.xcassets
+                                Image(imageName)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 210)
+                                    .clipped()
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 14)
+                                    )
+
                             } else {
-                                RoundedRectangle(cornerRadius: 14)
-                                    .fill(Color.purple.opacity(0.12))
-                                    .frame(height: 140)
-                                    .overlay {
-                                        Image(systemName: "photo")
-                                            .font(.system(size: 34))
-                                            .foregroundStyle(.purple)
-                                    }
+
+                                // Default placeholder from Assets.xcassets
+                                Image("myAction")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 210)
+                                    .clipped()
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 14)
+                                    )
                             }
+
 
                             // Reflection heading
                             HStack {
@@ -147,7 +165,8 @@ struct ArchiveDetailQuestsView: View {
                         description: "Find a piece of urban nature.",
                         isCompleted: true,
                         userReflection: "I noticed a garden I usually walk past.",
-                        reflectionDate: .now
+                        reflectionDate: .now,
+                        imageName: ""
                     )
                 ]
             )

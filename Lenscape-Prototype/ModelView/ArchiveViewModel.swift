@@ -32,26 +32,29 @@ final class ArchiveViewModel {
                 tasks: [
                     // Task 1
                     QuestItem(
-                        title: "Rohit believes games can help people imagine a better future...",
-                        description: "Take a moment to make one with for a better change in the future",
+                        title: "Take a moment to make one with for a better change in the future",
+                        description: "Rohit believes games can help people imagine a better future...",
                         isCompleted: true,
-                        userReflection: "TESTER REFLECTION - Quest 1"
+                        userReflection: "I want everyone to be aware of Animal Welfare",
+                        imageName: "regenExploration"
                     ),
                     
                     // Task 2
                     QuestItem(
-                        title: "'The beauty of the game or the fun comes from different perspectives that are coming together'",
-                        description: "Ask someone what they wish for a better future",
+                        title: "Ask someone what they wish for a better future",
+                        description: "'The beauty of the game or the fun comes from different perspectives that are coming together'",
                         isCompleted: true,
-                        userReflection: "TESTER REFLECTION - Quest 2"
+                        userReflection: "I asked a stranger and they wanted more seating areas in this neighbourhood. This is to spend more time outdoors, relax and interact with others",
+                        imageName: "regenConnection"
                     ),
                     
                     // Task 3
                     QuestItem(
-                        title: "'What would I do if I have given that power or responsibility to bring the change?'",
-                        description: "Share one suggestion for improving your neighbourhood in our community reflection",
+                        title: "Share one suggestion for improving your neighbourhood in our community reflection",
+                        description: "'What would I do if I have given that power or responsibility to bring the change?'",
                         isCompleted: true,
-                        userReflection: "TESTER REFLECTION - Quest 3"
+                        userReflection: "I would love to have more water refill stations around my area, especially in the city during Summer, we shouldn't have to spend money to have something essential to our life.",
+                        imageName: "regenAction"
                     )
                 ]
             )
@@ -76,7 +79,8 @@ final class ArchiveViewModel {
                         title: "Use your maps to find a park or green space in your city that you haven't gone to before",
                         description: "'I think I pass by a lot of green spaces and different gardens apart from Carlton Gardens'",
                         isCompleted: true,
-                        userReflection: "TESTER REFLECTION - Quest 1"
+                        userReflection: "I pass Coburg Lake Reserve with the dog I walk every day",
+                        imageName: "urbanExploration"
                     ),
                     
                     // Task 2
@@ -84,7 +88,8 @@ final class ArchiveViewModel {
                         title: "Share a new place you've discovered with someone",
                         description: "'Whenever I take a walk in any direction, I find something new'",
                         isCompleted: true,
-                        userReflection: "TESTER REFLECTION - Quest 2"
+                        userReflection: "This cute stationery shop in Brunswick is really colourful. Such a gem, my creative friends must really like it, will take them there soon",
+                        imageName: "urbanConnection"
                     ),
                     
                     // Task 3
@@ -92,7 +97,8 @@ final class ArchiveViewModel {
                         title: "Visit a local library, park or market with someone",
                         description: "'I also want to go to the mighty Carlton Library right after class'",
                         isCompleted: true,
-                        userReflection: "TESTER REFLECTION - Quest 3"
+                        userReflection: "I'm going to the state library to finish my assignments",
+                        imageName: "urbanAction"
                     )
                 ]
             )

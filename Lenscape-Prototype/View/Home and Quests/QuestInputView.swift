@@ -358,7 +358,8 @@ struct QuestInputView: View {
                 communityViewModel: CommunityViewModel(),
                 task: QuestItem(
                     title: "Sample Quest",
-                    description: "Sample Description"
+                    description: "Sample Description",
+                    imageName: ""
                 )
             )
         }

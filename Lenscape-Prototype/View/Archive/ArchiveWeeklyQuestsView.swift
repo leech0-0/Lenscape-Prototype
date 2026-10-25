@@ -149,7 +149,7 @@ private struct WeeklyArchiveCard: View {
 
             Spacer(minLength: 1)
 
-            Image(week.imageName)
+            Image(week.imageName ?? "badgeRegen0")
                 .resizable()
                 .frame(width: 100, height: 100)
                 .padding(.bottom, 10)

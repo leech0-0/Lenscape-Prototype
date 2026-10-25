@@ -16,6 +16,7 @@ struct QuestItem: Identifiable {
     var userReflection: String = ""
     var reflectionDate: Date?
     var imageData: Data?
+    var imageName: String
     
     init(
         id: UUID = UUID(),
@@ -24,7 +25,8 @@ struct QuestItem: Identifiable {
         isCompleted: Bool = false,
         userReflection: String = "",
         reflectionDate: Date? = nil,
-        imageData: Data? = nil
+        imageData: Data? = nil,
+        imageName: String
     ){
         self.id = id
         self.title = title
@@ -33,6 +35,7 @@ struct QuestItem: Identifiable {
         self.userReflection = userReflection
         self.reflectionDate = reflectionDate
         self.imageData = imageData
+        self.imageName = imageName
     }
     
 }
