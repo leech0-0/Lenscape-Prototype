@@ -84,6 +84,19 @@ private struct WeeklyArchiveCard: View {
     private var memoryCount: Int {
         week.memories.count
     }
+    
+    private var thumbnailImageName: String {
+        switch week.title {
+        case "Urban and Public Spaces":
+            return "urbanThumbnail"
+
+        case "Regeneration":
+            return "regenThumbnail"
+
+        default:
+            return "regenThumbnail"
+        }
+    }
 
     var body: some View {
         VStack(spacing: 12) {
@@ -114,22 +127,16 @@ private struct WeeklyArchiveCard: View {
                 }
             } label: {
                 ZStack {
-                    Rectangle()
-                        .fill(Color.purple.opacity(0.14))
 
-                    Image(colorScheme == .dark ? "videoShapeDM" : "videoShapeLM")
+                    Image(thumbnailImageName)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .offset(y: -60)
+                        .frame(width: 150, height: 250)
 
-                    Image(systemName: "play.circle.fill")
-                        .font(.system(size: 34))
-                        .foregroundStyle(.purple.opacity(0.5))
 
-                    Text("Click here to watch the weekly video!")
+                    Text("Click here to watch the archived video!")
                         .font(.caption)
-                        .offset(y: 60)
+                        .offset(y: 150)
                         .padding()
                 }
                 .frame(height: 250)
@@ -139,6 +146,7 @@ private struct WeeklyArchiveCard: View {
             }
             .buttonStyle(.plain)
 
+            Text("")
             
             Text(memoryCount == 1 ? "1 Memory" : "\(memoryCount) Memories")
                 .font(.caption)

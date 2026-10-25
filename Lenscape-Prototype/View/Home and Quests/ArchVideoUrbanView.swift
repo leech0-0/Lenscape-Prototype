@@ -1,77 +1,96 @@
-//
-//  QuestVideoView.swift
-//  Lenscape-Prototype
-//
 
 import SwiftUI
 import AVKit
 
 struct ArchVideoUrbanView: View {
     var viewModel: QuestsViewModel
-    
+
     @Environment(\.colorScheme) private var colorScheme
-    
-    //initialise AVPlayer with local video
-    var player: AVPlayer {
-        if let url = Bundle.main.url(forResource: "urbanVideo", withExtension: ".mp4") {
-            return AVPlayer(url: url)
-        }
-        return AVPlayer()
-    }
-    
+    @State private var hasStartedVideo = false
+    @State private var player: AVPlayer? = nil
+
     var body: some View {
-        ScrollView{
+        ScrollView {
             VStack(spacing: 24) {
                 Text("Beyond the Front Door with Faiza")
                     .font(.title2)
                     .bold()
                     .padding(.top)
-                
-//     see if they want this           Text("This week's video focuses on ... ")
-                
-                // Embedded Video Player
-                VideoPlayer(player: player)
-                    .frame(height: 660)
-                    .cornerRadius(16)
-                    .padding(.horizontal)
-                    .onAppear {
-                        player.play()
+
+                // MARK: - Video Thumbnail / Player
+                ZStack {
+                    if hasStartedVideo, let player {
+                        VideoPlayer(player: player)
+                    } else {
+                        Image("urbanThumbnail")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity)
+                            .overlay {
+                                Image(systemName: "play.circle.fill")
+                                    .font(.system(size: 64))
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 5)
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                guard let url = Bundle.main.url(
+                                    forResource: "urbanVideo",
+                                    withExtension: "mp4"
+                                ) else {
+                                    print("Could not find urbanVideo.mp4")
+                                    return
+                                }
+
+                                let newPlayer = AVPlayer(url: url)
+                                player = newPlayer
+                                hasStartedVideo = true
+                                newPlayer.play()
+                            }
                     }
-                    .onDisappear {
-                        player.pause()
-                    }
-                
+                }
+                .frame(maxWidth: .infinity)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .padding(.horizontal)
+
                 Spacer()
-                
-                // Proceed to the actual QuestsView
-                NavigationLink(destination: ArchiveWeeklyQuestsView()){
+
+                // MARK: - Back to Archived Quests
+                NavigationLink(destination: ArchiveWeeklyQuestsView()) {
                     Text("Back to Archived Quests")
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.purple, in: RoundedRectangle(cornerRadius: 14))
+                        .background(
+                            Color.purple,
+                            in: RoundedRectangle(cornerRadius: 14)
+                        )
                 }
                 .padding(.horizontal)
-                .simultaneousGesture(TapGesture().onEnded {
-                    viewModel.markVideoAsWatched()
-                })
-                ZStack {
-                    Image(colorScheme == .dark ? "holdingUpDM" : "holdingUpLM")
-                        .resizable()
-                        .frame(width: 250, height: 100)
-                        .offset(y: -20)
-                }
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        viewModel.markVideoAsWatched()
+                    }
+                )
+
+                Image(colorScheme == .dark ? "holdingUpDM" : "holdingUpLM")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 250, height: 100)
+                    .padding(.top, -20)
             }
             .navigationTitle("Archived Video")
             .navigationBarTitleDisplayMode(.inline)
-            // put colour in here after fixing up the QuestsView
-            
-            
+        }
+        .onDisappear {
+            player?.pause()
         }
     }
 }
 
 #Preview {
-    ArchVideoUrbanView(viewModel: QuestsViewModel())
+    NavigationStack {
+        ArchVideoUrbanView(viewModel: QuestsViewModel())
+    }
 }
