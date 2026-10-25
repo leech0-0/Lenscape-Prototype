@@ -154,7 +154,7 @@ final class ArchiveViewModel {
                 ArchivedWeek(
                     title: currentTitle,
                     date: currentMemories.compactMap { $0.reflectionDate }.max() ?? Date(),
-                    imageName: badgeImageName(for: currentTitle),
+                    imageName: questsViewModel.communityBadgeImage,
                     tasks: currentMemories
                 )
             )
@@ -163,38 +163,41 @@ final class ArchiveViewModel {
         return weeks.sorted { $0.date > $1.date }
     }
     
-    // MARK: - Archive a finished week
+   //MARK: - Archive Current Week
     
     func archiveCurrentWeek(
         from questsViewModel: QuestsCompletedViewModel,
+        badgeImageName: String,
         date: Date = Date()
     ) {
         let title = questsViewModel.currentQuest.title
-        
-        // Prevent the same week's title from being archived twice.
+
         guard !archivedWeeks.contains(where: { $0.title == title }) else {
             return
         }
-        
+
         let completedTasks = questsViewModel.questTasks.filter {
             $0.isCompleted &&
-            !$0.userReflection.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            !$0.userReflection.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            ).isEmpty
         }
-        
+
         guard !completedTasks.isEmpty else {
             return
         }
-        
+
         let archivedWeek = ArchivedWeek(
             title: title,
             date: date,
-            imageName: badgeImageName(for: title),
+            imageName: badgeImageName,
             tasks: completedTasks
         )
-        
+
         archivedWeeks.append(archivedWeek)
         archivedWeeks.sort { $0.date > $1.date }
     }
+
     
     // MARK: - Badge Images
     

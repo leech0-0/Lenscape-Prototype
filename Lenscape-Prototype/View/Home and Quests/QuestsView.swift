@@ -44,25 +44,40 @@ struct QuestsView: View {
             ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         
+                        
                         // MARK: - Title Card
-                        HStack(alignment: .top) {
+                        HStack(alignment: .center, spacing: 12) {
                             VStack(alignment: .leading, spacing: 12) {
                                 Text("Community Connection Quests")
                                     .font(.title2)
                                     .fontWeight(.bold)
+                                    .fixedSize(horizontal: false, vertical: true)
+
+                                Button {
+                                    showQuestDetails = true
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Text("See details")
+                                        Image(systemName: "chevron.right")
+                                    }
+                                    .font(.headline)
+                                    .foregroundStyle(.blue)
                                 }
                             }
-                            
-                            Spacer()
-                            
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
                             Image(viewModel.communityBadgeImage)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100, height: 100)
-                                .animation(.easeInOut(duration: 0.3), value: viewModel.completedReflectionCount)
-                            
+                                .fixedSize()
+                                .animation(
+                                    .easeInOut(duration: 0.3),
+                                    value: viewModel.completedReflectionCount
+                                )
                         }
                         .padding(20)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(Color("questTitle"))
@@ -77,6 +92,7 @@ struct QuestsView: View {
                             RoundedRectangle(cornerRadius: 20)
                         )
                         .padding(.horizontal)
+
                         
                         // MARK: - Quests Section
                         Text("Quests")
