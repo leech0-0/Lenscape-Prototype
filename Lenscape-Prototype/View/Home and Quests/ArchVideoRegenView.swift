@@ -3,30 +3,44 @@ import SwiftUI
 import AVKit
 
 struct ArchVideoRegenView: View {
+
     var viewModel: QuestsViewModel
 
     @Environment(\.colorScheme) private var colorScheme
+
     @State private var hasStartedVideo = false
     @State private var player: AVPlayer? = nil
 
     var body: some View {
+
         ScrollView {
+
             VStack(spacing: 24) {
+
                 Text("Board to the Future with Rohit")
                     .font(.title2)
                     .bold()
                     .padding(.top)
 
                 // MARK: - Video Thumbnail / Player
+
                 ZStack {
+
                     if hasStartedVideo, let player {
+
                         VideoPlayer(player: player)
+                            .frame(maxWidth: .infinity)
+                            .aspectRatio(9/16, contentMode: .fit)
+
                     } else {
+
                         Image("regenThumbnail")
                             .resizable()
                             .scaledToFit()
                             .frame(maxWidth: .infinity)
+                            .aspectRatio(9/16, contentMode: .fit)
                             .overlay {
+
                                 Image(systemName: "play.circle.fill")
                                     .font(.system(size: 64))
                                     .foregroundStyle(.white)
@@ -34,6 +48,7 @@ struct ArchVideoRegenView: View {
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {
+
                                 guard let url = Bundle.main.url(
                                     forResource: "regenVideo",
                                     withExtension: "mp4"
@@ -43,8 +58,10 @@ struct ArchVideoRegenView: View {
                                 }
 
                                 let newPlayer = AVPlayer(url: url)
+
                                 player = newPlayer
                                 hasStartedVideo = true
+
                                 newPlayer.play()
                             }
                     }
@@ -56,7 +73,9 @@ struct ArchVideoRegenView: View {
                 Spacer()
 
                 // MARK: - Back to Archived Quests
+
                 NavigationLink(destination: ArchiveWeeklyQuestsView()) {
+
                     Text("Back to Archived Quests")
                         .font(.headline)
                         .foregroundStyle(.white)

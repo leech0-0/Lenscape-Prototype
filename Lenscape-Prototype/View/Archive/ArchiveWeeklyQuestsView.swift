@@ -88,7 +88,7 @@ private struct WeeklyArchiveCard: View {
     private var thumbnailImageName: String {
         switch week.title {
         case "Urban and Public Spaces":
-            return "urbanThumbnail"
+            return "commConThumbnail"
 
         case "Regeneration":
             return "regenThumbnail"
